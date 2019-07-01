@@ -12,7 +12,6 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  */
 
-//import { GUI, controllers } from '../../dat.gui';
 //import { GUI, controllers } from 'D:/My documents/MyProjects/webgl/three.js/GitHub/dat.gui';
 //Please download https://github.com/anhr/dat.gui/tree/CustomController to '../../../../My documents/MyProjects/webgl/three.js/GitHub/dat.gui' folder
 import { GUI, controllers } from '../../../../My documents/MyProjects/webgl/three.js/GitHub/dat.gui';
@@ -62,23 +61,41 @@ function addButton( innerHTML, title, onclick ) {
 	return button;
 
 }
-
 /**
- * Periodically changes the selected 3D object.
- * Adds NumberControllerSlider controller into PlayController for changing of the rate of changing of 3D obects per second.
+ * PlayController class for using in my version of dat.gui(https://github.com/anhr/dat.gui) for playing of 3D obects in my projects.
  * 
- * @class Example of subtype of CustomController class.
+ * @class PlayController
  *
  * @extends dat.controllers.CustomController
  *
  */
 export class PlayController extends controllers.CustomController {
+
 	/**
-	 * 
-	 * @param {Function} init Returns an object with elements for adding into "property-name" class element.
+	 * @callback THREEGroup THREE.Group. See https://threejs.org/docs/index.html#api/en/objects/Group for details
+	 */
+
+	/**
+	 * @callback Mesh Class representing triangular polygon mesh based objects. See https://threejs.org/docs/index.html#api/en/objects/Group for details
+	 */
+
+	/**
+	 * @callback onEvent
+	 * @param {Mesh} objects3DItem selected mesh.
+	 */
+
+	/**
+	 *
+	 * @param {THREEGroup} group group of 3D objects for playing.
+	 * @param {Object} [events] controller events. Default no events is sent to your web page.
+	 * @param {onEvent} [events.onShowObject3D] The show 3D object event.
+	 * @param {onEvent} [events.onHideObject3D] The hide 3D object event.
+	 * @param {onEvent} [events.onRestoreObject3D] Event of restore of 3D object to original state.
+	 * @param {onEvent} [events.onSelectedObject3D] Event of selecting of 3D object.
 	 */
 	constructor( group, events ) {
 
+		events = events || {};
 		var _playNext;
 		super( {
 
@@ -108,13 +125,14 @@ export class PlayController extends controllers.CustomController {
 						var objects3DItem = group.children[i];
 						if ( selectObject3DIndex === i ) {
 
-							events.onShowObject3D( objects3DItem );
+							if ( events.onShowObject3D !== undefined )
+								events.onShowObject3D( objects3DItem );
 
 						} else {
 
-							events.onHideObject3D( objects3DItem );
-							//			objects3DItem.visible = false;//hide object3D
-
+							if ( events.onHideObject3D !== undefined )
+								events.onHideObject3D( objects3DItem );
+	
 						}
 
 					}
@@ -128,7 +146,8 @@ export class PlayController extends controllers.CustomController {
 					for ( var i = 0; i < group.children.length; i++ ) {
 
 						var objects3DItem = group.children[i];
-						events.onRestoreObject3D( objects3DItem );
+						if ( events.onRestoreObject3D !== undefined )
+							events.onRestoreObject3D( objects3DItem );
 
 					}
 
@@ -171,16 +190,16 @@ export class PlayController extends controllers.CustomController {
 					var objects3DItem = group.children[selectObject3DIndex];
 					if ( objects3DItem !== undefined ) {
 
-//						objects3DItem.material.color = objects3DItem.userData.color;
-						events.onRestoreObject3D( objects3DItem );
+						if ( events.onRestoreObject3D !== undefined )
+							events.onRestoreObject3D( objects3DItem );
 
 					}
 					selectObject3DIndex--;
 					if ( selectObject3DIndex < 0 )
 						selectObject3DIndex = group.children.length - 1;
 					objects3DItem = group.children[selectObject3DIndex];
-//					objects3DItem.material.color = colorRed;
-					events.onSelectedObject3D( objects3DItem );
+					if ( events.onSelectedObject3D !== undefined )
+						events.onSelectedObject3D( objects3DItem );
 
 				} );
 
@@ -223,13 +242,18 @@ export class PlayController extends controllers.CustomController {
 				buttons.buttonNext = addButton( lang.nextSymbol, lang.nextSymbolTitle, function ( value ) {
 
 					var objects3DItem = group.children[selectObject3DIndex];
-					if ( objects3DItem !== undefined )
-						events.onRestoreObject3D( objects3DItem );
+					if ( objects3DItem !== undefined ) {
+
+						if ( events.onRestoreObject3D !== undefined )
+							events.onRestoreObject3D( objects3DItem );
+
+					}
 					selectObject3DIndex++;
 					if ( selectObject3DIndex >= group.children.length )
 						selectObject3DIndex = 0;
 					objects3DItem = group.children[selectObject3DIndex];
-					events.onSelectedObject3D( objects3DItem );
+					if ( events.onSelectedObject3D !== undefined )
+						events.onSelectedObject3D( objects3DItem );
 
 				} );
 
@@ -240,7 +264,7 @@ export class PlayController extends controllers.CustomController {
 		}, 'playRate', 1, 25, 1 );
 		this.onChange = function ( value ){
 
-			console.log( '_controller.onChange: ' + value );
+			//console.log( '_controller.onChange: ' + value );
 			if ( group.userData.timerId === undefined )
 				return;
 

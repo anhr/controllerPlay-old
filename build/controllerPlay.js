@@ -1,4 +1,5 @@
 /**
+ * node.js version of the controllerPlay
  * My custom controller in my version of dat.gui(https://github.com/anhr/dat.gui) for playing of 3D obects in my projects.
  *
  * @author Andrej Hristoliubov https://anhr.github.io/AboutMe/
@@ -2509,6 +2510,7 @@ function addButton(innerHTML, title, onclick) {
 }
 class PlayController extends controllers.CustomController {
 					constructor(group, events) {
+										events = events || {};
 										var _playNext;
 										super({
 															playRate: 1,
@@ -2526,9 +2528,9 @@ class PlayController extends controllers.CustomController {
 																									for (var i = 0; i < group.children.length; i++) {
 																														var objects3DItem = group.children[i];
 																														if (selectObject3DIndex === i) {
-																																			events.onShowObject3D(objects3DItem);
+																																			if (events.onShowObject3D !== undefined) events.onShowObject3D(objects3DItem);
 																														} else {
-																																			events.onHideObject3D(objects3DItem);
+																																			if (events.onHideObject3D !== undefined) events.onHideObject3D(objects3DItem);
 																														}
 																									}
 																									RenamePlayButtons(lang.pause, lang.pauseTitle);
@@ -2536,7 +2538,7 @@ class PlayController extends controllers.CustomController {
 																				function pause() {
 																									for (var i = 0; i < group.children.length; i++) {
 																														var objects3DItem = group.children[i];
-																														events.onRestoreObject3D(objects3DItem);
+																														if (events.onRestoreObject3D !== undefined) events.onRestoreObject3D(objects3DItem);
 																									}
 																									RenamePlayButtons(lang.playSymbol, lang.playTitle);
 																									clearInterval(group.userData.timerId);
@@ -2560,12 +2562,12 @@ class PlayController extends controllers.CustomController {
 																									if (selectObject3DIndex === -1) selectObject3DIndex = group.children.length;
 																									var objects3DItem = group.children[selectObject3DIndex];
 																									if (objects3DItem !== undefined) {
-																														events.onRestoreObject3D(objects3DItem);
+																														if (events.onRestoreObject3D !== undefined) events.onRestoreObject3D(objects3DItem);
 																									}
 																									selectObject3DIndex--;
 																									if (selectObject3DIndex < 0) selectObject3DIndex = group.children.length - 1;
 																									objects3DItem = group.children[selectObject3DIndex];
-																									events.onSelectedObject3D(objects3DItem);
+																									if (events.onSelectedObject3D !== undefined) events.onSelectedObject3D(objects3DItem);
 																				});
 																				buttons.buttonPlay = addButton(lang.playSymbol, lang.playTitle, function (value) {
 																									if (buttons.buttonPlay.innerHTML === lang.playSymbol) {
@@ -2588,17 +2590,18 @@ class PlayController extends controllers.CustomController {
 																				});
 																				buttons.buttonNext = addButton(lang.nextSymbol, lang.nextSymbolTitle, function (value) {
 																									var objects3DItem = group.children[selectObject3DIndex];
-																									if (objects3DItem !== undefined) events.onRestoreObject3D(objects3DItem);
+																									if (objects3DItem !== undefined) {
+																														if (events.onRestoreObject3D !== undefined) events.onRestoreObject3D(objects3DItem);
+																									}
 																									selectObject3DIndex++;
 																									if (selectObject3DIndex >= group.children.length) selectObject3DIndex = 0;
 																									objects3DItem = group.children[selectObject3DIndex];
-																									events.onSelectedObject3D(objects3DItem);
+																									if (events.onSelectedObject3D !== undefined) events.onSelectedObject3D(objects3DItem);
 																				});
 																				return buttons;
 															}
 										}, 'playRate', 1, 25, 1);
 										this.onChange = function (value) {
-															console.log('_controller.onChange: ' + value);
 															if (group.userData.timerId === undefined) return;
 															clearInterval(group.userData.timerId);
 															group.userData.timerId = setInterval(_playNext, 1000 / value);
