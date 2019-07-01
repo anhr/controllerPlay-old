@@ -11,32 +11,22 @@ The easiest way to use controllerPlay in your code is by using the built source 
 In your `head` tag, include the following code:
 ```
 <script src="https://raw.githack.com/anhr/DropdownMenu/master/build/controllerPlay.js"></script>
+```
 
 Now you can use window.controllerPlay for append to the dat.gui.
 
-### controllerPlay.create( arrayMenu, options )
+### new controllerPlay.PlayController( group, events )
 
-Creates new menu.
+Creates new PlayController.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| arrayMenu | <code>String[] or Object[]</code> |  | array of menu and submenu items. If string then menu item name. If object then options of the new menu item:|
-| [arrayMenuItem.name] | <code>String or HTMLElement</code> | "" | If string then menu item name. If HTMLElement then item element. Optional. |
-| [arrayMenuItem.title] | <code>String</code> |  | menu item title. Optional. |
-| [arrayMenuItem.id] | <code>String</code> |  | menu item identifier. Optional. |
-| [arrayMenuItem.style] | <code>String</code> |  | menu item style. Example: "float: right;" Optional. |
-| [arrayMenuItem.items] | <code>Array</code> |  | array of submenu items. Same as menu item. Optional. |
-| [arrayMenuItem.onclick] | <code>Function</code> |  | function(event) called when user has clicked a menu item. event - event details. Optional. |
-| [arrayMenuItem.drop] | <code>String or Object</code> |  | direction of drop of the submenu. Following directions is available: If string then "up" - drop submenu to up. "left" - shift submenu to left. If object then following members is available: "up: true" and "left: true". |
-|  |  |  |  |
-| [options] | <code>Object</code> |  | Optional. Followed options is available: |
-| [options.elParent] | <code>HTMLElement</code> | "body" element | Parent element of new menu. Optional. |
-  [options.canvas] | <code>HTMLElement</code> |  | canvas element. Use if you want put a menu inside a canvas. See "button inside canvas" example below for details. Optional. |
-| [options.decorations] | <code>String</code> |  | Optional. You can decorate your menu by a built-in style or use your custom style. Currently two built-in styles is available: |
-|  | <code>String</code> | 'Gradient' | use gradient.css file for decoration. |
-|  | <code>String</code> | 'Transparent' | use transparent.css file for decoration. |
-|  |  |  | Custom decoration: |
-|  | <code>String</code> | 'Custom' | please edit the custom.css file from my example if you want a custom decoration of your menu. |
+| group | <code>THREE.Group</code> |  | group of 3D objects for playing. See https://threejs.org/docs/index.html#api/en/objects/Group for details. |
+| [events] | <code>String or HTMLElement</code> | "" | If string then menu item name. If HTMLElement then item element. Optional. |
+| [events.onShowObject3D] | <code>callback</code> |  | The show 3D object event. callback function ( objects3DItem ). objects3DItem is selected mesh. |
+| [events.onHideObject3D] | <code>callback</code> |  | The hide 3D object event. callback function ( objects3DItem ). objects3DItem is selected mesh. |
+| [events.onRestoreObject3D] | <code>callback</code> |  | Event of restore of 3D object to original state. callback function ( objects3DItem ). objects3DItem is selected mesh. |
+| [events.onSelectedObject3D] | <code>callback</code> |  | Event of selecting of 3D object. callback function ( objects3DItem ). objects3DItem is selected mesh. |
 
 **Example. Simple menu.**  
 ```
