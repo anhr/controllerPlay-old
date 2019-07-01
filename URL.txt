@@ -1,0 +1,12 @@
+test page
+https://raw.githack.com/anhr/DropdownMenu/master/Examples/html/
+http://localhost/DropdownMenu/Examples/html/
+-------------------------------------------
+Building menu
+
+Open "Node.js command prompt"
+
+d:
+cd "D:\WebFeatures\GoogleSite\nodejs\controllerPlay"
+npm install
+npm run build
