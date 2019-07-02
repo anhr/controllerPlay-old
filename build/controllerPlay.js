@@ -23,6 +23,82 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
 };
 
+
+
+
+
+
+
+
+
+
+
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
+
+
+
+
+
+
+
+
+
+var inherits = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+};
+
+
+
+
+
+
+
+
+
+
+
+var possibleConstructorReturn = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && (typeof call === "object" || typeof call === "function") ? call : self;
+};
+
 function ___$insertStyle(css) {
   if (!css) {
     return;
@@ -2475,152 +2551,162 @@ var controllers = {
 };
 
 var lang = {
-					prevSymbol: '←',
-					prevSymbolTitle: 'Go to previous object 3D',
-					nextSymbol: '→',
-					nextSymbolTitle: 'Go to next object 3D',
-					playSymbol: '►',
-					playTitle: 'Play',
-					pause: '❚❚',
-					pauseTitle: 'Pause',
-					repeat: '⥀',
-					repeatOn: 'Turn repeat on',
-					repeatOff: 'Turn repeat off',
-					controllerTitle: 'Rate of changing of selected of 3D objects per second.'
+	prevSymbol: '←',
+	prevSymbolTitle: 'Go to previous object 3D',
+	nextSymbol: '→',
+	nextSymbolTitle: 'Go to next object 3D',
+	playSymbol: '►',
+	playTitle: 'Play',
+	pause: '❚❚',
+	pauseTitle: 'Pause',
+	repeat: '⥀',
+	repeatOn: 'Turn repeat on',
+	repeatOff: 'Turn repeat off',
+	controllerTitle: 'Rate of changing of selected of 3D objects per second.'
 };
 switch (typeof THREE === 'undefined' || typeof THREE.getLanguageCode === 'undefined' ? 'en' : THREE.getLanguageCode()) {
-					case 'ru':
-										lang.prevSymbolTitle = 'Выбрать предыдущий 3D объект';
-										lang.playTitle = 'Проиграть';
-										lang.nextSymbolTitle = 'Выбрать следующий 3D объект';
-										lang.pauseTitle = 'Пауза';
-										lang.repeatOn = 'Повторять проигрывание';
-										lang.repeatOff = 'Остановить повтор проигрывания';
-										lang.controllerTitle = 'Скорость выбора 3D объекта в секунду.';
-										break;
+	case 'ru':
+		lang.prevSymbolTitle = 'Выбрать предыдущий 3D объект';
+		lang.playTitle = 'Проиграть';
+		lang.nextSymbolTitle = 'Выбрать следующий 3D объект';
+		lang.pauseTitle = 'Пауза';
+		lang.repeatOn = 'Повторять проигрывание';
+		lang.repeatOff = 'Остановить повтор проигрывания';
+		lang.controllerTitle = 'Скорость выбора 3D объекта в секунду.';
+		break;
 }
 function addButton(innerHTML, title, onclick) {
-					var button = document.createElement('span');
-					button.innerHTML = innerHTML;
-					button.title = title;
-					button.style.cursor = 'pointer';
-					button.style.margin = '0px 2px';
-					button.onclick = onclick;
-					return button;
+	var button = document.createElement('span');
+	button.innerHTML = innerHTML;
+	button.title = title;
+	button.style.cursor = 'pointer';
+	button.style.margin = '0px 2px';
+	button.onclick = onclick;
+	return button;
 }
-class PlayController extends controllers.CustomController {
-					constructor(group, events) {
-										events = events || {};
-										var _playNext;
-										super({
-															playRate: 1,
-															property: function (customController) {
-																				var buttons = {};
-																				function RenamePlayButtons(innerHTML, title) {
-																									buttons.buttonPlay.innerHTML = innerHTML;
-																									buttons.buttonPlay.title = title;
-																				}
-																				var selectObject3DIndex = -1;
-																				function play() {
-																									if (selectObject3DIndex === -1 || selectObject3DIndex === group.children.length) {
-																														selectObject3DIndex = 0;
-																									}
-																									for (var i = 0; i < group.children.length; i++) {
-																														var objects3DItem = group.children[i];
-																														if (selectObject3DIndex === i) {
-																																			if (events.onShowObject3D !== undefined) events.onShowObject3D(objects3DItem);
-																														} else {
-																																			if (events.onHideObject3D !== undefined) events.onHideObject3D(objects3DItem);
-																														}
-																									}
-																									RenamePlayButtons(lang.pause, lang.pauseTitle);
-																				}
-																				function pause() {
-																									for (var i = 0; i < group.children.length; i++) {
-																														var objects3DItem = group.children[i];
-																														if (events.onRestoreObject3D !== undefined) events.onRestoreObject3D(objects3DItem);
-																									}
-																									RenamePlayButtons(lang.playSymbol, lang.playTitle);
-																									clearInterval(group.userData.timerId);
-																									group.userData.timerId = undefined;
-																				}
-																				function isRepeat() {
-																									return buttons.buttonRepeat.title !== lang.repeatOn;
-																				}
-																				function playNext() {
-																									selectObject3DIndex++;
-																									if (selectObject3DIndex >= group.children.length) {
-																														if (isRepeat()) selectObject3DIndex = 0;else {
-																																			pause();
-																																			return;
-																														}
-																									}
-																									play();
-																				}
-																				_playNext = playNext;
-																				buttons.buttonPrev = addButton(lang.prevSymbol, lang.prevSymbolTitle, function (value) {
-																									if (selectObject3DIndex === -1) selectObject3DIndex = group.children.length;
-																									var objects3DItem = group.children[selectObject3DIndex];
-																									if (objects3DItem !== undefined) {
-																														if (events.onRestoreObject3D !== undefined) events.onRestoreObject3D(objects3DItem);
-																									}
-																									selectObject3DIndex--;
-																									if (selectObject3DIndex < 0) selectObject3DIndex = group.children.length - 1;
-																									objects3DItem = group.children[selectObject3DIndex];
-																									if (events.onSelectedObject3D !== undefined) events.onSelectedObject3D(objects3DItem);
-																				});
-																				buttons.buttonPlay = addButton(lang.playSymbol, lang.playTitle, function (value) {
-																									if (buttons.buttonPlay.innerHTML === lang.playSymbol) {
-																														group.userData.timerId = -1;
-																														play(group, events);
-																														group.userData.timerId = setInterval(playNext, 1000 / customController.controller.getValue());
-																									} else pause();
-																				});
-																				var colorGray = 'rgb(200,200,200)';
-																				buttons.buttonRepeat = addButton(lang.repeat, lang.repeatOn, function (value) {
-																									function RenameRepeatButtons(title, color$$1) {
-																														buttons.buttonRepeat.title = title;
-																														buttons.buttonRepeat.style.color = color$$1;
-																									}
-																									if (buttons.buttonRepeat.title === lang.repeatOn) {
-																														RenameRepeatButtons(lang.repeatOff, 'rgb(255,255,255)');
-																									} else {
-																														RenameRepeatButtons(lang.repeatOn, colorGray);
-																									}
-																				});
-																				buttons.buttonNext = addButton(lang.nextSymbol, lang.nextSymbolTitle, function (value) {
-																									var objects3DItem = group.children[selectObject3DIndex];
-																									if (objects3DItem !== undefined) {
-																														if (events.onRestoreObject3D !== undefined) events.onRestoreObject3D(objects3DItem);
-																									}
-																									selectObject3DIndex++;
-																									if (selectObject3DIndex >= group.children.length) selectObject3DIndex = 0;
-																									objects3DItem = group.children[selectObject3DIndex];
-																									if (events.onSelectedObject3D !== undefined) events.onSelectedObject3D(objects3DItem);
-																				});
-																				return buttons;
-															}
-										}, 'playRate', 1, 25, 1);
-										this.onChange = function (value) {
-															if (group.userData.timerId === undefined) return;
-															clearInterval(group.userData.timerId);
-															group.userData.timerId = setInterval(_playNext, 1000 / value);
-										};
+var PlayController = function (_controllers$CustomCo) {
+	inherits(PlayController, _controllers$CustomCo);
+	function PlayController(group, events) {
+		classCallCheck(this, PlayController);
+		events = events || {};
+		var _playNext;
+		var _this2 = possibleConstructorReturn(this, (PlayController.__proto__ || Object.getPrototypeOf(PlayController)).call(this, {
+			playRate: 1,
+			property: function property(customController) {
+				var buttons = {};
+				function RenamePlayButtons(innerHTML, title) {
+					buttons.buttonPlay.innerHTML = innerHTML;
+					buttons.buttonPlay.title = title;
+				}
+				var selectObject3DIndex = -1;
+				function play() {
+					if (selectObject3DIndex === -1 || selectObject3DIndex === group.children.length) {
+						selectObject3DIndex = 0;
 					}
-					set controller(newController) {
-										this._controller = newController;
-										var _this = this;
-										this._controller.onChange(function (value) {
-															_this.onChange(value);
-										});
-										this._controller.domElement.title = lang.controllerTitle;
+					for (var i = 0; i < group.children.length; i++) {
+						var objects3DItem = group.children[i];
+						if (selectObject3DIndex === i) {
+							if (events.onShowObject3D !== undefined) events.onShowObject3D(objects3DItem);
+						} else {
+							if (events.onHideObject3D !== undefined) events.onHideObject3D(objects3DItem);
+						}
 					}
-					get controller() {
-										return this._controller;
+					RenamePlayButtons(lang.pause, lang.pauseTitle);
+				}
+				function pause() {
+					for (var i = 0; i < group.children.length; i++) {
+						var objects3DItem = group.children[i];
+						if (events.onRestoreObject3D !== undefined) events.onRestoreObject3D(objects3DItem);
 					}
+					RenamePlayButtons(lang.playSymbol, lang.playTitle);
+					clearInterval(group.userData.timerId);
+					group.userData.timerId = undefined;
+				}
+				function isRepeat() {
+					return buttons.buttonRepeat.title !== lang.repeatOn;
+				}
+				function playNext() {
+					selectObject3DIndex++;
+					if (selectObject3DIndex >= group.children.length) {
+						if (isRepeat()) selectObject3DIndex = 0;else {
+							pause();
+							return;
+						}
+					}
+					play();
+				}
+				_playNext = playNext;
+				buttons.buttonPrev = addButton(lang.prevSymbol, lang.prevSymbolTitle, function (value) {
+					if (selectObject3DIndex === -1) selectObject3DIndex = group.children.length;
+					var objects3DItem = group.children[selectObject3DIndex];
+					if (objects3DItem !== undefined) {
+						if (events.onRestoreObject3D !== undefined) events.onRestoreObject3D(objects3DItem);
+					}
+					selectObject3DIndex--;
+					if (selectObject3DIndex < 0) selectObject3DIndex = group.children.length - 1;
+					objects3DItem = group.children[selectObject3DIndex];
+					if (events.onSelectedObject3D !== undefined) events.onSelectedObject3D(objects3DItem);
+				});
+				buttons.buttonPlay = addButton(lang.playSymbol, lang.playTitle, function (value) {
+					if (buttons.buttonPlay.innerHTML === lang.playSymbol) {
+						group.userData.timerId = -1;
+						play(group, events);
+						group.userData.timerId = setInterval(playNext, 1000 / customController.controller.getValue());
+					} else pause();
+				});
+				var colorGray = 'rgb(200,200,200)';
+				buttons.buttonRepeat = addButton(lang.repeat, lang.repeatOn, function (value) {
+					function RenameRepeatButtons(title, color$$1) {
+						buttons.buttonRepeat.title = title;
+						buttons.buttonRepeat.style.color = color$$1;
+					}
+					if (buttons.buttonRepeat.title === lang.repeatOn) {
+						RenameRepeatButtons(lang.repeatOff, 'rgb(255,255,255)');
+					} else {
+						RenameRepeatButtons(lang.repeatOn, colorGray);
+					}
+				});
+				buttons.buttonNext = addButton(lang.nextSymbol, lang.nextSymbolTitle, function (value) {
+					var objects3DItem = group.children[selectObject3DIndex];
+					if (objects3DItem !== undefined) {
+						if (events.onRestoreObject3D !== undefined) events.onRestoreObject3D(objects3DItem);
+					}
+					selectObject3DIndex++;
+					if (selectObject3DIndex >= group.children.length) selectObject3DIndex = 0;
+					objects3DItem = group.children[selectObject3DIndex];
+					if (events.onSelectedObject3D !== undefined) events.onSelectedObject3D(objects3DItem);
+				});
+				return buttons;
+			}
+		}, 'playRate', 1, 25, 1));
+		_this2.onChange = function (value) {
+			if (group.userData.timerId === undefined) return;
+			clearInterval(group.userData.timerId);
+			group.userData.timerId = setInterval(_playNext, 1000 / value);
+		};
+		return _this2;
+	}
+	createClass(PlayController, [{
+		key: 'controller',
+		set: function set$$1(newController) {
+			this._controller = newController;
+			var _this = this;
+			this._controller.onChange(function (value) {
+				_this.onChange(value);
+			});
+			this._controller.domElement.title = lang.controllerTitle;
+		},
+		get: function get$$1() {
+			return this._controller;
+		}
+	}]);
+	return PlayController;
+}(controllers.CustomController);
+function create(group, events) {
+	return new PlayController(group, events);
 }
 
-exports.PlayController = PlayController;
+exports.create = create;
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
