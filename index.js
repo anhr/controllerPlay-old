@@ -18,7 +18,7 @@ import { GUI, controllers } from '../../../../My documents/MyProjects/webgl/thre
 
 //Localization
 
-var lang = {
+export var lang = {
 
 	prevSymbol: '←',
 	prevSymbolTitle: 'Go to previous object 3D',
@@ -69,7 +69,7 @@ function addButton( innerHTML, title, onclick ) {
  * @extends dat.controllers.CustomController
  *
  */
-export class PlayController extends controllers.CustomController {
+class PlayController extends controllers.CustomController {
 
 	/**
 	 * @callback THREEGroup THREE.Group. See https://threejs.org/docs/index.html#api/en/objects/Group for details
@@ -92,11 +92,13 @@ export class PlayController extends controllers.CustomController {
 	 * @param {onEvent} [events.onHideObject3D] The hide 3D object event.
 	 * @param {onEvent} [events.onRestoreObject3D] Event of restore of 3D object to original state.
 	 * @param {onEvent} [events.onSelectedObject3D] Event of selecting of 3D object.
+	 * @param {onEvent} [events.onRenamePlayButton] Event of renaming of the Play button. function ( name, title )
+	 * name: name of the Play button, title: title
 	 */
 	constructor( group, events ) {
 
 		events = events || {};
-		var _playNext;
+		var _playNext, _prev, _play, _repeat, _next;
 		super( {
 
 			playRate: 1,//Default play rate is 1 changes per second
@@ -107,6 +109,8 @@ export class PlayController extends controllers.CustomController {
 
 					buttons.buttonPlay.innerHTML = innerHTML;
 					buttons.buttonPlay.title = title;
+					if ( events.onRenamePlayButton !== undefined )
+						events.onRenamePlayButton( innerHTML, title );
 
 				}
 
@@ -183,7 +187,7 @@ export class PlayController extends controllers.CustomController {
 				_playNext = playNext;
 
 				//Go to previous object 3D button
-				buttons.buttonPrev = addButton( lang.prevSymbol, lang.prevSymbolTitle, function ( value ) {
+				function prev() {
 
 					if ( selectObject3DIndex === -1 )
 						selectObject3DIndex = group.children.length;
@@ -201,10 +205,12 @@ export class PlayController extends controllers.CustomController {
 					if ( events.onSelectedObject3D !== undefined )
 						events.onSelectedObject3D( objects3DItem );
 
-				} );
+				}
+				_prev = prev;
+				buttons.buttonPrev = addButton( lang.prevSymbol, lang.prevSymbolTitle, prev );
 
 				//Play/Pause button
-				buttons.buttonPlay = addButton( lang.playSymbol, lang.playTitle, function ( value ) {
+				function play3DObject( value ) {
 
 					if ( buttons.buttonPlay.innerHTML === lang.playSymbol ) {
 
@@ -214,16 +220,20 @@ export class PlayController extends controllers.CustomController {
 
 					} else pause();
 
-				} );
+				}
+				_play = play3DObject;
+				buttons.buttonPlay = addButton( lang.playSymbol, lang.playTitle, play3DObject );
 
 				//Repeat button
 				var colorGray = 'rgb(200,200,200)';
-				buttons.buttonRepeat = addButton( lang.repeat, lang.repeatOn, function ( value ) {
+				function repeat( value ) {
 
 					function RenameRepeatButtons( title, color ) {
 
 						buttons.buttonRepeat.title = title;
 						buttons.buttonRepeat.style.color = color;
+						if ( events.onRenameRepeatButton !== undefined )
+							events.onRenameRepeatButton( title, color );
 
 					}
 					if ( buttons.buttonRepeat.title === lang.repeatOn ) {
@@ -236,10 +246,12 @@ export class PlayController extends controllers.CustomController {
 
 					}
 
-				} );
+				}
+				_repeat = repeat;
+				buttons.buttonRepeat = addButton( lang.repeat, lang.repeatOn, repeat );
 
 				//Go to next object 3D button
-				buttons.buttonNext = addButton( lang.nextSymbol, lang.nextSymbolTitle, function ( value ) {
+				function next( value ) {
 
 					var objects3DItem = group.children[selectObject3DIndex];
 					if ( objects3DItem !== undefined ) {
@@ -255,11 +267,13 @@ export class PlayController extends controllers.CustomController {
 					if ( events.onSelectedObject3D !== undefined )
 						events.onSelectedObject3D( objects3DItem );
 
-				} );
+				}
+				_next = next;
+				buttons.buttonNext = addButton( lang.nextSymbol, lang.nextSymbolTitle, next );
 
 				return buttons;
 
-			}/*init*/,
+			},
 
 		}, 'playRate', 1, 25, 1 );
 		this.onChange = function ( value ){
@@ -270,6 +284,26 @@ export class PlayController extends controllers.CustomController {
 
 			clearInterval( group.userData.timerId );
 			group.userData.timerId = setInterval( _playNext, 1000 / value );
+
+		}
+		this.prev = function () {
+
+			_prev();
+
+		}
+		this.play = function () {
+
+			_play();
+
+		}
+		this.repeat = function () {
+
+			_repeat();
+
+		}
+		this.next = function () {
+
+			_next();
 
 		}
 
@@ -293,5 +327,10 @@ export class PlayController extends controllers.CustomController {
 		return this._controller;
 
 	}
+
+}
+export function create( group, events ) {
+
+	return new PlayController( group, events );
 
 }

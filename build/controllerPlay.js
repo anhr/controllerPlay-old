@@ -3,6 +3,7 @@
  * My custom controller in my version of dat.gui(https://github.com/anhr/dat.gui) for playing of 3D obects in my projects.
  *
  * @author Andrej Hristoliubov https://anhr.github.io/AboutMe/
+ * Thanks to https://stackoverflow.com/a/4797877/5175935
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2589,7 +2590,7 @@ var PlayController = function (_controllers$CustomCo) {
 	function PlayController(group, events) {
 		classCallCheck(this, PlayController);
 		events = events || {};
-		var _playNext;
+		var _playNext, _prev, _play, _repeat, _next;
 		var _this2 = possibleConstructorReturn(this, (PlayController.__proto__ || Object.getPrototypeOf(PlayController)).call(this, {
 			playRate: 1,
 			property: function property(customController) {
@@ -2597,6 +2598,7 @@ var PlayController = function (_controllers$CustomCo) {
 				function RenamePlayButtons(innerHTML, title) {
 					buttons.buttonPlay.innerHTML = innerHTML;
 					buttons.buttonPlay.title = title;
+					if (events.onRenamePlayButton !== undefined) events.onRenamePlayButton(innerHTML, title);
 				}
 				var selectObject3DIndex = -1;
 				function play() {
@@ -2636,7 +2638,7 @@ var PlayController = function (_controllers$CustomCo) {
 					play();
 				}
 				_playNext = playNext;
-				buttons.buttonPrev = addButton(lang.prevSymbol, lang.prevSymbolTitle, function (value) {
+				function prev() {
 					if (selectObject3DIndex === -1) selectObject3DIndex = group.children.length;
 					var objects3DItem = group.children[selectObject3DIndex];
 					if (objects3DItem !== undefined) {
@@ -2646,27 +2648,34 @@ var PlayController = function (_controllers$CustomCo) {
 					if (selectObject3DIndex < 0) selectObject3DIndex = group.children.length - 1;
 					objects3DItem = group.children[selectObject3DIndex];
 					if (events.onSelectedObject3D !== undefined) events.onSelectedObject3D(objects3DItem);
-				});
-				buttons.buttonPlay = addButton(lang.playSymbol, lang.playTitle, function (value) {
+				}
+				_prev = prev;
+				buttons.buttonPrev = addButton(lang.prevSymbol, lang.prevSymbolTitle, prev);
+				function play3DObject(value) {
 					if (buttons.buttonPlay.innerHTML === lang.playSymbol) {
 						group.userData.timerId = -1;
 						play(group, events);
 						group.userData.timerId = setInterval(playNext, 1000 / customController.controller.getValue());
 					} else pause();
-				});
+				}
+				_play = play3DObject;
+				buttons.buttonPlay = addButton(lang.playSymbol, lang.playTitle, play3DObject);
 				var colorGray = 'rgb(200,200,200)';
-				buttons.buttonRepeat = addButton(lang.repeat, lang.repeatOn, function (value) {
+				function repeat(value) {
 					function RenameRepeatButtons(title, color$$1) {
 						buttons.buttonRepeat.title = title;
 						buttons.buttonRepeat.style.color = color$$1;
+						if (events.onRenameRepeatButton !== undefined) events.onRenameRepeatButton(title, color$$1);
 					}
 					if (buttons.buttonRepeat.title === lang.repeatOn) {
 						RenameRepeatButtons(lang.repeatOff, 'rgb(255,255,255)');
 					} else {
 						RenameRepeatButtons(lang.repeatOn, colorGray);
 					}
-				});
-				buttons.buttonNext = addButton(lang.nextSymbol, lang.nextSymbolTitle, function (value) {
+				}
+				_repeat = repeat;
+				buttons.buttonRepeat = addButton(lang.repeat, lang.repeatOn, repeat);
+				function next(value) {
 					var objects3DItem = group.children[selectObject3DIndex];
 					if (objects3DItem !== undefined) {
 						if (events.onRestoreObject3D !== undefined) events.onRestoreObject3D(objects3DItem);
@@ -2675,7 +2684,9 @@ var PlayController = function (_controllers$CustomCo) {
 					if (selectObject3DIndex >= group.children.length) selectObject3DIndex = 0;
 					objects3DItem = group.children[selectObject3DIndex];
 					if (events.onSelectedObject3D !== undefined) events.onSelectedObject3D(objects3DItem);
-				});
+				}
+				_next = next;
+				buttons.buttonNext = addButton(lang.nextSymbol, lang.nextSymbolTitle, next);
 				return buttons;
 			}
 		}, 'playRate', 1, 25, 1));
@@ -2683,6 +2694,18 @@ var PlayController = function (_controllers$CustomCo) {
 			if (group.userData.timerId === undefined) return;
 			clearInterval(group.userData.timerId);
 			group.userData.timerId = setInterval(_playNext, 1000 / value);
+		};
+		_this2.prev = function () {
+			_prev();
+		};
+		_this2.play = function () {
+			_play();
+		};
+		_this2.repeat = function () {
+			_repeat();
+		};
+		_this2.next = function () {
+			_next();
 		};
 		return _this2;
 	}
@@ -2706,6 +2729,7 @@ function create(group, events) {
 	return new PlayController(group, events);
 }
 
+exports.lang = lang;
 exports.create = create;
 
 Object.defineProperty(exports, '__esModule', { value: true });
