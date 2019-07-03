@@ -93,7 +93,9 @@ class PlayController extends controllers.CustomController {
 	 * @param {onEvent} [events.onRestoreObject3D] Event of restore of 3D object to original state.
 	 * @param {onEvent} [events.onSelectedObject3D] Event of selecting of 3D object.
 	 * @param {onEvent} [events.onRenamePlayButton] Event of renaming of the Play button. function ( name, title )
-	 * name: name of the Play button, title: title
+	 * name: name of the Play button, title: title.
+	 * @param {onEvent} [events.onRenameRepeatButton] Event of renaming of the Repeat button. function ( title, color )
+	 * title: title of the Repeat button, color: style.color of the Repeat button.
 	 */
 	constructor( group, events ) {
 
