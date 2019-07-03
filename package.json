@@ -8,7 +8,7 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c && rollup -c rollup.config.min.js"
   },
   "repository": {
     "type": "git",
