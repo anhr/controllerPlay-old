@@ -31,6 +31,9 @@ Creates new Play controller.
 | [events.onHideObject3D] | <code>callback</code> |  | The hide 3D object event. callback function ( objects3DItem ). objects3DItem is selected mesh. |
 | [events.onRestoreObject3D] | <code>callback</code> |  | Event of restore of 3D object to original state. callback function ( objects3DItem ). objects3DItem is selected mesh. |
 | [events.onSelectedObject3D] | <code>callback</code> |  | Event of selecting of 3D object. callback function ( objects3DItem ). objects3DItem is selected mesh. |
+| [events.onRenamePlayButton] | <code>callback</code> |  | Event of renaming of the Play button. function ( name, title )
+	name: name of the Play button,
+	title: title |
 
 **Example.**  
 ```
