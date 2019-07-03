@@ -10,181 +10,63 @@ The easiest way to use controllerPlay in your code is by using the built source 
 
 In your `head` tag, include the following code:
 ```
-<script src="https://raw.githack.com/anhr/DropdownMenu/master/build/controllerPlay.js"></script>
+<script src="https://raw.githack.com/anhr/controllerPlay/master/build/controllerPlay.js"></script>
+```
+or
+```
+<script src="https://raw.githack.com/anhr/controllerPlay/master/build/controllerPlay.min.js"></script>
 ```
 
 Now you can use window.controllerPlay for append to the dat.gui.
 
-### new controllerPlay.PlayController( group, events )
+### controllerPlay.create( group, events )
 
-Creates new PlayController.
+Creates new Play controller.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | group | <code>THREE.Group</code> |  | group of 3D objects for playing. See https://threejs.org/docs/index.html#api/en/objects/Group for details. |
-| [events] | <code>String or HTMLElement</code> | "" | If string then menu item name. If HTMLElement then item element. Optional. |
+| [events] | <code>Object</code> | "" | controller events. Default no events is sent to your web page. |
 | [events.onShowObject3D] | <code>callback</code> |  | The show 3D object event. callback function ( objects3DItem ). objects3DItem is selected mesh. |
 | [events.onHideObject3D] | <code>callback</code> |  | The hide 3D object event. callback function ( objects3DItem ). objects3DItem is selected mesh. |
 | [events.onRestoreObject3D] | <code>callback</code> |  | Event of restore of 3D object to original state. callback function ( objects3DItem ). objects3DItem is selected mesh. |
 | [events.onSelectedObject3D] | <code>callback</code> |  | Event of selecting of 3D object. callback function ( objects3DItem ). objects3DItem is selected mesh. |
 
-**Example. Simple menu.**  
+**Example.**  
 ```
 <script>
-dropdownMenu.create( [
+group = new THREE.Group();
+group.add( new THREE.Points( ... ) );
+group.add( new THREE.Mesh( ... ) );
 
-	'Menu 1 ',
-	{
+var gui = new dat.GUI();
+var colorRed = new THREE.Color( 0xff0000 );
+gui.add( controllerPlay.create( group, {
 
-		name: 'Menu 2 ',
-		items: [
+	onShowObject3D: function ( objects3DItem ) {
 
-			'Item 2.1',
-			{
-				name: 'Item 2.2',
-				onclick: function ( event ) {
-
-					var message = 'Item 2.2 onclick';
-					//console.log( message );
-					alert( message )
-
-				}
-			},
-
-		],
+		objects3DItem.visible = true;
 
 	},
-	{
+	onHideObject3D: function ( objects3DItem ) {
 
-		name: 'Menu 3',
-		onclick: function ( event ) {
+		objects3DItem.visible = false;//hide object3D
 
-			var message = 'Menu 3 onclick';
-			//console.log( message );
-			alert( message )
+	},
+	onSelectedObject3D: function ( objects3DItem ) {
 
-		},
+		objects3DItem.material.color = colorRed;
+		objects3DItem.visible = true;
+
+	},
+	onRestoreObject3D: function ( objects3DItem ) {
+
+		objects3DItem.material.color = objects3DItem.userData.color;
+		objects3DItem.visible = true;
 
 	},
 
-] );
-</script>
-```
-
-**Example. Drop menu to the left or/and up.**  
-```
-<script>
-dropdownMenu.create( [
-
-	{
-
-		name: 'Drop up',
-		drop: 'up',
-		items: [
-
-			'up item 1',
-			{
-				name: 'up item 2',
-				onclick: function ( event ) {
-
-					var message = 'up item 2 onclick';
-					//console.log( message );
-					alert( message )
-
-				}
-			},
-
-		],
-
-	},
-	{
-
-		name: 'Left',
-		drop: 'left',
-		items: [
-
-			'left item 1',
-			{
-				name: 'left item 2',
-				onclick: function ( event ) {
-
-					var message = 'left item 2 onclick';
-					//console.log( message );
-					alert( message )
-
-				}
-			},
-
-		],
-
-	},
-	{
-
-		name: 'Up left',
-		drop:
-		{
-
-			left: true,
-			up: true,
-
-		},
-		items: [
-
-			'up left item 1',
-			{
-				name: 'up left item 2',
-				onclick: function ( event ) {
-
-					var message = 'up left item 2 onclick';
-					//console.log( message );
-					alert( message )
-
-				}
-			},
-
-		],
-
-	},
-
-], {
-
-		decorations: 'Gradient',
-
-	} );
-</script>
-```
-
-**Example. Button inside canvas.**  
-```
-<div class="container" id="containerDSE">
-	<canvas id="canvas"></canvas>
-</div>
-<script>
-var elContainer = document.getElementById( "containerDSE" ),
-elCanvas = elContainer.querySelector( 'canvas' );
-
-dropdownMenu.create( [
-
-	{
-
-		name: 'Button',
-		onclick: function ( event ) {
-
-			var message = 'Button onclick';
-			//console.log( message );
-			alert( message )
-
-		},
-
-	},
-
-], {
-
-	elParent: elContainer,
-	canvas: elCanvas,
-	decorations: 'Transparent',
-
-} );
+} ) );
 </script>
 ```
 
@@ -192,8 +74,6 @@ dropdownMenu.create( [
 
 ```
 └── build - Compiled source code.
-└── styles - Menu styles.
-└── Examples/html/ - Example.
 ```
 
 ## Building your own DropdownMenu
@@ -222,28 +102,25 @@ Windows 10
 
 	Opera 60
 
-	Safari 5.1.7 
+	Safari 5.1.7 "Your browser does not seem to support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation" style="color:#000">WebGL</a>"
 
 	FireFox 56
 
 Android 6.0.1
 
-	Chrome 74 - Some very strange issues if you append into your web page three and more menus and include an elements between menus.
-		Please see "Attention! Line below is not compatible with Android mobile version of the Chrome." comment
-		in https://github.com/anhr/DropdownMenu/blob/master/Examples/html/index.html file for more details.
+	Chrome 74 
 
-
-	Samsung Galaxy S5 Internet 9.2 - Same issues as Chrome
+	Samsung Galaxy S5
 
 	FireFox 67
 
 	Opera 52
 
-	Opera Mini 43 - Same issues as Chrome
+	Opera Mini 43
 
 LG Smart tv
 
-	Chrome 
+	Chrome - init failed! WeekMap is not defined
 
 
 ## Thanks
