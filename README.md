@@ -67,6 +67,20 @@ gui.add( controllerPlay.create( group, {
 		objects3DItem.visible = true;
 
 	},
+	onRenamePlayButton: function ( name, title ) {
+
+		var elMenuButtonPlay = document.getElementById( 'menuButtonPlay' );
+		elMenuButtonPlay.innerHTML = name;
+		elMenuButtonPlay.title = title;
+
+	},
+	onRenameRepeatButton: function ( title, color ) {
+
+		var elMenuButtonRepeat = document.getElementById( 'menuButtonRepeat' );
+		elMenuButtonRepeat.style.color = color;;
+		elMenuButtonRepeat.title = title;
+
+	},
 
 } ) );
 </script>
