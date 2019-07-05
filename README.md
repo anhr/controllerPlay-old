@@ -27,10 +27,10 @@ Creates new Play controller.
 | --- | --- | --- | --- |
 | group | <code>THREE.Group</code> |  | group of 3D objects for playing. See https://threejs.org/docs/index.html#api/en/objects/Group for details. |
 | [events] | <code>Object</code> | "" | controller events. Default no events is sent to your web page. |
-| [events.onShowObject3D] | <code>callback</code> |  | The show 3D object event. callback function ( objects3DItem ). objects3DItem is selected mesh. |
+| [events.onShowObject3D] | <code>callback</code> |  | The show 3D object event. callback function ( objects3DItem, index ) objects3DItem: showed mesh, index: index of showed mesh.|
 | [events.onHideObject3D] | <code>callback</code> |  | The hide 3D object event. callback function ( objects3DItem ). objects3DItem is selected mesh. |
 | [events.onRestoreObject3D] | <code>callback</code> |  | Event of restore of 3D object to original state. callback function ( objects3DItem ). objects3DItem is selected mesh. |
-| [events.onSelectedObject3D] | <code>callback</code> |  | Event of selecting of 3D object. callback function ( objects3DItem ). objects3DItem is selected mesh. |
+| [events.onSelectedObject3D] | <code>callback</code> |  | Event of selecting of 3D object. callback Function( objects3DItem, index ) objects3DItem: selected mesh, index: index of selected mesh. |
 | [events.onRenamePlayButton] | <code>callback</code> |  | Event of renaming of the Play button. callback function ( name, title ) name: name of the Play button, title: title |
 | [events.onRenameRepeatButton] | <code>callback</code> |  | Event of renaming of the Repeat button. callback function ( title, color ) title: title of the Repeat button, color: style.color of the Repeat button. |
 
