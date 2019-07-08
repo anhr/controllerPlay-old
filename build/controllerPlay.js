@@ -2590,7 +2590,7 @@ var PlayController = function (_controllers$CustomCo) {
 	function PlayController(group, events) {
 		classCallCheck(this, PlayController);
 		events = events || {};
-		var _playNext, _prev, _play, _repeat, _next;
+		var _playNext, _prev, _play, _repeat, _next, _getGroup, _selectObject3D;
 		var _this2 = possibleConstructorReturn(this, (PlayController.__proto__ || Object.getPrototypeOf(PlayController)).call(this, {
 			playRate: 1,
 			property: function property(customController) {
@@ -2608,7 +2608,7 @@ var PlayController = function (_controllers$CustomCo) {
 					for (var i = 0; i < group.children.length; i++) {
 						var objects3DItem = group.children[i];
 						if (selectObject3DIndex === i) {
-							if (events.onShowObject3D !== undefined) events.onShowObject3D(objects3DItem);
+							if (events.onShowObject3D !== undefined) events.onShowObject3D(objects3DItem, selectObject3DIndex);
 						} else {
 							if (events.onHideObject3D !== undefined) events.onHideObject3D(objects3DItem);
 						}
@@ -2639,15 +2639,7 @@ var PlayController = function (_controllers$CustomCo) {
 				}
 				_playNext = playNext;
 				function prev() {
-					if (selectObject3DIndex === -1) selectObject3DIndex = group.children.length;
-					var objects3DItem = group.children[selectObject3DIndex];
-					if (objects3DItem !== undefined) {
-						if (events.onRestoreObject3D !== undefined) events.onRestoreObject3D(objects3DItem);
-					}
-					selectObject3DIndex--;
-					if (selectObject3DIndex < 0) selectObject3DIndex = group.children.length - 1;
-					objects3DItem = group.children[selectObject3DIndex];
-					if (events.onSelectedObject3D !== undefined) events.onSelectedObject3D(objects3DItem);
+					selectObject3D(selectObject3DIndex - 1);
 				}
 				_prev = prev;
 				buttons.buttonPrev = addButton(lang.prevSymbol, lang.prevSymbolTitle, prev);
@@ -2676,17 +2668,27 @@ var PlayController = function (_controllers$CustomCo) {
 				_repeat = repeat;
 				buttons.buttonRepeat = addButton(lang.repeat, lang.repeatOn, repeat);
 				function next(value) {
+					selectObject3D(selectObject3DIndex + 1);
+				}
+				_next = next;
+				buttons.buttonNext = addButton(lang.nextSymbol, lang.nextSymbolTitle, next);
+				function selectObject3D(index) {
+					if (selectObject3DIndex === -1) selectObject3DIndex = group.children.length;
 					var objects3DItem = group.children[selectObject3DIndex];
 					if (objects3DItem !== undefined) {
 						if (events.onRestoreObject3D !== undefined) events.onRestoreObject3D(objects3DItem);
 					}
-					selectObject3DIndex++;
+					selectObject3DIndex = index;
 					if (selectObject3DIndex >= group.children.length) selectObject3DIndex = 0;
+					if (selectObject3DIndex < 0) selectObject3DIndex = group.children.length - 1;
 					objects3DItem = group.children[selectObject3DIndex];
-					if (events.onSelectedObject3D !== undefined) events.onSelectedObject3D(objects3DItem);
+					if (events.onSelectedObject3D !== undefined) events.onSelectedObject3D(objects3DItem, selectObject3DIndex);
 				}
-				_next = next;
-				buttons.buttonNext = addButton(lang.nextSymbol, lang.nextSymbolTitle, next);
+				_selectObject3D = selectObject3D;
+				function getGroup() {
+					return group;
+				}
+				_getGroup = getGroup;
 				return buttons;
 			}
 		}, 'playRate', 1, 25, 1));
@@ -2706,6 +2708,12 @@ var PlayController = function (_controllers$CustomCo) {
 		};
 		_this2.next = function () {
 			_next();
+		};
+		_this2.getGroup = function () {
+			return _getGroup();
+		};
+		_this2.selectObject3D = function (index) {
+			_selectObject3D(parseInt(index));
 		};
 		return _this2;
 	}

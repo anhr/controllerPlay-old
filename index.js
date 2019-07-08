@@ -88,11 +88,13 @@ class PlayController extends controllers.CustomController {
 	 *
 	 * @param {THREEGroup} group group of 3D objects for playing.
 	 * @param {Object} [events] controller events. Default no events is sent to your web page.
-	 * @param {onEvent} [events.onShowObject3D] The show 3D object event.
+	 * @param {onEvent} [events.onShowObject3D] The show 3D object event. Function( objects3DItem, index )
+	 * objects3DItem: showed mesh, index: index of showed mesh.
 	 * @param {onEvent} [events.onHideObject3D] The hide 3D object event.
 	 * @param {onEvent} [events.onRestoreObject3D] Event of restore of 3D object to original state.
-	 * @param {onEvent} [events.onSelectedObject3D] Event of selecting of 3D object.
-	 * @param {onEvent} [events.onRenamePlayButton] Event of renaming of the Play button. function ( name, title )
+	 * @param {onEvent} [events.onSelectedObject3D] Event of selecting of 3D object. Function( objects3DItem, index )
+	 * objects3DItem: selected mesh, index: index of selected mesh.
+	 * @param {onEvent} [events.onRenamePlayButton] Event of renaming of the Play button. Function ( name, title )
 	 * name: name of the Play button, title: title.
 	 * @param {onEvent} [events.onRenameRepeatButton] Event of renaming of the Repeat button. function ( title, color )
 	 * title: title of the Repeat button, color: style.color of the Repeat button.
@@ -100,7 +102,7 @@ class PlayController extends controllers.CustomController {
 	constructor( group, events ) {
 
 		events = events || {};
-		var _playNext, _prev, _play, _repeat, _next;
+		var _playNext, _prev, _play, _repeat, _next, _getGroup, _selectObject3D;
 		super( {
 
 			playRate: 1,//Default play rate is 1 changes per second
@@ -132,7 +134,7 @@ class PlayController extends controllers.CustomController {
 						if ( selectObject3DIndex === i ) {
 
 							if ( events.onShowObject3D !== undefined )
-								events.onShowObject3D( objects3DItem );
+								events.onShowObject3D( objects3DItem, selectObject3DIndex );
 
 						} else {
 
@@ -191,6 +193,8 @@ class PlayController extends controllers.CustomController {
 				//Go to previous object 3D button
 				function prev() {
 
+					selectObject3D( selectObject3DIndex - 1 );
+/*
 					if ( selectObject3DIndex === -1 )
 						selectObject3DIndex = group.children.length;
 					var objects3DItem = group.children[selectObject3DIndex];
@@ -205,7 +209,8 @@ class PlayController extends controllers.CustomController {
 						selectObject3DIndex = group.children.length - 1;
 					objects3DItem = group.children[selectObject3DIndex];
 					if ( events.onSelectedObject3D !== undefined )
-						events.onSelectedObject3D( objects3DItem );
+						events.onSelectedObject3D( objects3DItem, selectObject3DIndex );
+*/
 
 				}
 				_prev = prev;
@@ -255,6 +260,9 @@ class PlayController extends controllers.CustomController {
 				//Go to next object 3D button
 				function next( value ) {
 
+					selectObject3D( selectObject3DIndex + 1 );
+
+/*
 					var objects3DItem = group.children[selectObject3DIndex];
 					if ( objects3DItem !== undefined ) {
 
@@ -267,11 +275,43 @@ class PlayController extends controllers.CustomController {
 						selectObject3DIndex = 0;
 					objects3DItem = group.children[selectObject3DIndex];
 					if ( events.onSelectedObject3D !== undefined )
-						events.onSelectedObject3D( objects3DItem );
+						events.onSelectedObject3D( objects3DItem, selectObject3DIndex );
+*/
 
 				}
 				_next = next;
 				buttons.buttonNext = addButton( lang.nextSymbol, lang.nextSymbolTitle, next );
+
+				//select Object 3D
+				function selectObject3D( index ) {
+
+					if ( selectObject3DIndex === -1 )
+						selectObject3DIndex = group.children.length;
+					var objects3DItem = group.children[selectObject3DIndex];
+					if ( objects3DItem !== undefined ) {
+
+						if ( events.onRestoreObject3D !== undefined )
+							events.onRestoreObject3D( objects3DItem );
+
+					}
+					selectObject3DIndex = index;
+					if ( selectObject3DIndex >= group.children.length )
+						selectObject3DIndex = 0;
+					if ( selectObject3DIndex < 0 )
+						selectObject3DIndex = group.children.length - 1;
+					objects3DItem = group.children[selectObject3DIndex];
+					if ( events.onSelectedObject3D !== undefined )
+						events.onSelectedObject3D( objects3DItem, selectObject3DIndex );
+
+				}
+				_selectObject3D = selectObject3D;
+
+				function getGroup() {
+
+					return group;
+
+				}
+				_getGroup = getGroup;
 
 				return buttons;
 
@@ -306,6 +346,16 @@ class PlayController extends controllers.CustomController {
 		this.next = function () {
 
 			_next();
+
+		}
+		this.getGroup = function () {
+
+			return _getGroup();
+
+		}
+		this.selectObject3D = function ( index ) {
+
+			_selectObject3D( parseInt( index ) );
 
 		}
 
