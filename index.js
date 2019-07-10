@@ -61,6 +61,7 @@ function addButton( innerHTML, title, onclick ) {
 	return button;
 
 }
+
 /**
  * PlayController class for using in my version of dat.gui(https://github.com/anhr/dat.gui) for playing of 3D obects in my projects.
  * 
@@ -85,19 +86,40 @@ class PlayController extends controllers.CustomController {
 	 */
 
 	/**
-	 *
+	 * @callback onSelectedObject3D
+	 * @param {Mesh} objects3DItem selected mesh.
+	 * @param {number} index index of selected mesh.
+	 */
+
+	/**
+	 * @callback onShowObject3D
+	 * @param {Mesh} objects3DItem showed mesh.
+	 * @param {number} index index of showed mesh.
+	 */
+
+	/**
+	 * @callback onRenamePlayButton
+	 * @param {string} name name of the Play button
+	 * @param {string} title title
+	 * @param {boolean} [play] true - start playing.
+	 */
+
+	/**
+	 * @callback onRenameRepeatButton
+	 * @param {string} title title of the Repeat button
+	 * @param {string} color style.color of the Repeat button.
+	 */
+
+	/**
+	 * PlayController class for using in my version of dat.gui(https://github.com/anhr/dat.gui) for playing of 3D obects in my projects.
 	 * @param {THREEGroup} group group of 3D objects for playing.
 	 * @param {Object} [events] controller events. Default no events is sent to your web page.
-	 * @param {onEvent} [events.onShowObject3D] The show 3D object event. Function( objects3DItem, index )
-	 * objects3DItem: showed mesh, index: index of showed mesh.
+	 * @param {onShowObject3D} [events.onShowObject3D] The show 3D object event.
 	 * @param {onEvent} [events.onHideObject3D] The hide 3D object event.
 	 * @param {onEvent} [events.onRestoreObject3D] Event of restore of 3D object to original state.
-	 * @param {onEvent} [events.onSelectedObject3D] Event of selecting of 3D object. Function( objects3DItem, index )
-	 * objects3DItem: selected mesh, index: index of selected mesh.
-	 * @param {onEvent} [events.onRenamePlayButton] Event of renaming of the Play button. Function ( name, title )
-	 * name: name of the Play button, title: title.
-	 * @param {onEvent} [events.onRenameRepeatButton] Event of renaming of the Repeat button. function ( title, color )
-	 * title: title of the Repeat button, color: style.color of the Repeat button.
+	 * @param {onSelectedObject3D} [events.onSelectedObject3D] Event of selecting of 3D object.
+	 * @param {onRenamePlayButton} [events.onRenamePlayButton] Event of renaming of the Play button.
+	 * @param {onRenameRepeatButton} [events.onRenameRepeatButton] Event of renaming of the Repeat button.
 	 */
 	constructor( group, events ) {
 
@@ -109,12 +131,12 @@ class PlayController extends controllers.CustomController {
 			property: function ( customController ) {
 
 				var buttons = {};
-				function RenamePlayButtons( innerHTML, title ) {
+				function RenamePlayButtons( innerHTML, title, play ) {
 
 					buttons.buttonPlay.innerHTML = innerHTML;
 					buttons.buttonPlay.title = title;
 					if ( events.onRenamePlayButton !== undefined )
-						events.onRenamePlayButton( innerHTML, title );
+						events.onRenamePlayButton( innerHTML, title, play );
 
 				}
 
@@ -122,7 +144,12 @@ class PlayController extends controllers.CustomController {
 
 				function play() {
 
-					//red color of selected object3D and hide others
+/*
+					if ( events.onPlay !== undefined )
+						events.onPlay();
+*/
+
+					//show of selected object3D and hide others
 					if ( ( selectObject3DIndex === -1 ) || ( selectObject3DIndex === group.children.length ) ) {
 
 						selectObject3DIndex = 0;
@@ -144,7 +171,7 @@ class PlayController extends controllers.CustomController {
 						}
 
 					}
-					RenamePlayButtons( lang.pause, lang.pauseTitle );
+//					RenamePlayButtons( lang.pause, lang.pauseTitle );
 
 				}
 
@@ -223,6 +250,7 @@ class PlayController extends controllers.CustomController {
 
 						group.userData.timerId = -1;
 						play( group, events );
+						RenamePlayButtons( lang.pause, lang.pauseTitle, true );
 						group.userData.timerId = setInterval( playNext, 1000 / customController.controller.getValue() );
 
 					} else pause();

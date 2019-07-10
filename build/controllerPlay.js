@@ -2595,10 +2595,10 @@ var PlayController = function (_controllers$CustomCo) {
 			playRate: 1,
 			property: function property(customController) {
 				var buttons = {};
-				function RenamePlayButtons(innerHTML, title) {
+				function RenamePlayButtons(innerHTML, title, play) {
 					buttons.buttonPlay.innerHTML = innerHTML;
 					buttons.buttonPlay.title = title;
-					if (events.onRenamePlayButton !== undefined) events.onRenamePlayButton(innerHTML, title);
+					if (events.onRenamePlayButton !== undefined) events.onRenamePlayButton(innerHTML, title, play);
 				}
 				var selectObject3DIndex = -1;
 				function play() {
@@ -2613,7 +2613,6 @@ var PlayController = function (_controllers$CustomCo) {
 							if (events.onHideObject3D !== undefined) events.onHideObject3D(objects3DItem);
 						}
 					}
-					RenamePlayButtons(lang.pause, lang.pauseTitle);
 				}
 				function pause() {
 					for (var i = 0; i < group.children.length; i++) {
@@ -2647,6 +2646,7 @@ var PlayController = function (_controllers$CustomCo) {
 					if (buttons.buttonPlay.innerHTML === lang.playSymbol) {
 						group.userData.timerId = -1;
 						play(group, events);
+						RenamePlayButtons(lang.pause, lang.pauseTitle, true);
 						group.userData.timerId = setInterval(playNext, 1000 / customController.controller.getValue());
 					} else pause();
 				}
