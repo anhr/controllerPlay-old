@@ -10,10 +10,12 @@ The easiest way to use controllerPlay in your code is by using the built source 
 
 In your `head` tag, include the following code:
 ```
+<script src="https://raw.githack.com/anhr/loadScriptNodeJS/master/build/loadScript.js"></script>
 <script src="https://raw.githack.com/anhr/controllerPlay/master/build/controllerPlay.js"></script>
 ```
 or
 ```
+<script src="https://raw.githack.com/anhr/loadScriptNodeJS/master/build/loadScript.min.js"></script>
 <script src="https://raw.githack.com/anhr/controllerPlay/master/build/controllerPlay.min.js"></script>
 ```
 

@@ -251,7 +251,8 @@ class PlayController extends controllers.CustomController {
 						group.userData.timerId = -1;
 						play( group, events );
 						RenamePlayButtons( lang.pause, lang.pauseTitle, true );
-						group.userData.timerId = setInterval( playNext, 1000 / customController.controller.getValue() );
+						group.userData.timerId = setInterval( playNext,
+							1000 / ( customController.controller === undefined ? 1 : customController.controller.getValue() ) );
 
 					} else pause();
 
