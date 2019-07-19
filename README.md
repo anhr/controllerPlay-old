@@ -1,6 +1,7 @@
 # controllerPlay
 node.js version of the controllerPlay.
 My custom controller in my version of [dat.gui](https://github.com/anhr/dat.gui) for playing of 3D obects in my projects.
+[Example](https://raw.githack.com/anhr/controllerPlay/master/Examples/html/).
 
 Uses in my projects:
  * [DropdownMenu](https://github.com/anhr/DropdownMenu)
