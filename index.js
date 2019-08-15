@@ -13,8 +13,8 @@
  */
 
 //import { GUI, controllers } from 'D:/My documents/MyProjects/webgl/three.js/GitHub/dat.gui';
-//Please download https://github.com/anhr/dat.gui/tree/CustomController to '../../../../My documents/MyProjects/webgl/three.js/GitHub/dat.gui' folder
-import { GUI, controllers } from '../../../../My documents/MyProjects/webgl/three.js/GitHub/dat.gui';
+//Please download https://github.com/anhr/dat.gui/tree/CustomController to '../../dat.gui' folder
+import { GUI, controllers } from '../../dat.gui';
 
 //Localization
 

@@ -10,9 +10,11 @@
 
 	<meta name="author" content="Andrej Hristoliubov https://anhr.github.io/AboutMe/">
 
-	<!--<script src="http://localhost/nodejs/loadFileNodeJS/build/loadFile.js"></script>-->
 
 	<!-- ===============================global links=============================================== -->
+
+	<!--<script src="https://raw.githack.com/anhr/loadFileNodeJS/master/build/loadFile.js"></script>-->
+	<!--<script src="https://raw.githack.com/anhr/loadFileNodeJS/master/build/loadFile.min.js"></script>-->
 
 	<!--<script src="https://raw.githack.com/anhr/loadScriptNodeJS/master/build/loadScript.js"></script>-->
 	<!--<script src="https://raw.githack.com/anhr/loadScriptNodeJS/master/build/loadScript.min.js"></script>-->
@@ -57,11 +59,14 @@
 	<!-- ================================local links======================================== -->
 	<!-- ATTENTION!!! localhost is not available for debugging of the mobile devices -->
 
-	<script src="http://192.168.1.2/nodejs/loadScriptNodeJS/build/loadScript.js"></script>
-	<!--<script src="http://localhost/nodejs/loadScriptNodeJS/build/loadScript.js"></script>-->
+	<!--<script src="http://localhost/nodejs/loadFileNodeJS/build/loadFile.js"></script>-->
+
+	<!--<script src="http://192.168.1.2/nodejs/loadScriptNodeJS/build/loadScript.js"></script>-->
+	<!--<script src="http://localhost/threejs/nodejs/loadScriptNodeJS/build/loadScript.js"></script>-->
+	<script src="../../../loadScriptNodeJS/build/loadScript.js"></script>
 	<!--<script src="build/loadScript.min.js"></script>-->
 
-	<script src="http://192.168.1.2/nodejs/myThreejs/build/myThreejs.js"></script>
+	<!--<script src="http://192.168.1.2/nodejs/myThreejs/build/myThreejs.js"></script>-->
 	<!--<script src="http://localhost/nodejs/myThreejs/build/myThreejs.js"></script>-->
 
 	<!--For mobile device debugging-->
@@ -94,6 +99,11 @@
 	<!--<script src="http://localhost/nodejs/controllerPlay/build/controllerPlay.js"></script>-->
 	<!--<script src="http://localhost/nodejs/controllerPlay/build/controllerPlay.min.js"></script>-->
 
+	<!--<script src="http://localhost/threejs/three.js/examples/js/libs/dat.gui.min.js"></script>-->
+	<!--<script src="../../../../three.js/examples/js/libs/dat.gui.min.js"></script>-->
+	<script src="../../../../three.js/examples/js/libs/dat.gui.js"></script>
+	<!--<script src="http://localhost/threejs/three.js/src/objects/SpriteText.js"></script>-->
+
 	<!-- ============================================================================== -->
 
 	<!--Attention! Load custom.css file after dropdownMenu.js file for correctly priority of the styles-->
@@ -109,71 +119,132 @@
 
 	<h2>Canvas.</h2>
 	<div id="canvasContainer1"><img src="https://raw.githubusercontent.com/anhr/TreeElementNodeJS/master/img/wait.gif"></div>
-	<script>
+	<script type="module">
+
+		import * as THREE from '../../../../three.js/build/three.module.js';
+		import { OrbitControls } from '../../../../three.js/examples/jsm/controls/OrbitControls.js';
+		import { ConvexBufferGeometry } from '../../../../three.js/examples/jsm/geometries/ConvexGeometry.js';
+
+		import { StereoEffect, spatialMultiplexsIndexs } from '../../../../three.js/examples/jsm/effects/StereoEffect.js';
+
+		import myThreejs from '../../../myThreejs/myThreejs.js';
+
+		import { WEBGL } from '../../../../three.js/examples/jsm/WEBGL.js';
+/*
+		import * as THREE from 'http://localhost/threejs/three.js/build/three.module.js';
+		import { OrbitControls } from 'http://localhost/threejs/three.js/examples/jsm/controls/OrbitControls.js';
+		import { ConvexBufferGeometry } from 'http://localhost/threejs/three.js/examples/jsm/geometries/ConvexGeometry.js';
+
+		//import { getLanguageCode } from 'http://localhost/nodejs/lang/lang.js';
+//		import { getLanguageCode } from 'https://raw.githack.com/anhr/lang/master/lang.js';
+
+		import { StereoEffect, spatialMultiplexsIndexs } from 'http://localhost/threejs/three.js/examples/jsm/effects/StereoEffect.js';
+
+//		import myThreejs from 'http://localhost/nodejs/myThreejs/build/myThreejs.js';
+		import myThreejs from 'http://localhost/threejs/nodejs/myThreejs/myThreejs.js';
+
+		import { WEBGL } from 'http://localhost/threejs/three.js/examples/jsm/WEBGL.js';
+*/
+		if ( WEBGL.isWebGLAvailable() === false ) {
+
+			document.body.appendChild( WEBGL.getWebGLErrorMessage() );
+			alert( WEBGL.getWebGLErrorMessage().innerHTML );
+
+		}
+
 		myThreejs.create( function ( group ) {
 
 			//Points
 
 			var points = new THREE.Points( new THREE.BufferGeometry().setFromPoints( [
 				new THREE.Vector3( 0, 0, 0 ),
-				new THREE.Vector3( 0, 0.5, -1 ),
-				new THREE.Vector3( 0.5, 0, 1 ),
+				new THREE.Vector3( -0.5, 0.5, -1 ),
+				new THREE.Vector3( 0.5, -0.5, 1 ),
 			] ),
 				new THREE.PointsMaterial( {
 
 					color: 0xffffff,
-					size: 0.05,
+					size: 0.05,//0.05,
 					alphaTest: 0.5
 
 				} ) );
+/*
 			points.position.copy( new THREE.Vector3( 0.1, 0.2, 0 ) );
 			points.scale.copy( new THREE.Vector3( 2, 2, 1 ) );
+*/
 			points.userData.color = points.material.color;
+			points.userData.raycaster = {
+
+				onIntersection: function ( raycaster, intersection, scene ) {
+
+					myThreejs.addSpriteTextIntersection( raycaster, intersection, scene );
+
+				},
+				onIntersectionOut: function ( scene ) {
+
+					myThreejs.removeSpriteTextIntersection( scene );
+
+				},
+
+			}
 			group.add( points );
 
 			//cubes
-			loadScript.sync( [
+			var cubeType = 'cube';
+			function addCube( cubePosition, color ) {
 
-				"https://raw.githack.com/anhr/three.js/dev/examples/js/geometries/ConvexGeometry.js",
-				"https://raw.githack.com/anhr/three.js/dev/examples/js/QuickHull.js",
+				var cube = new THREE.Mesh( new ConvexBufferGeometry( new THREE.CubeGeometry( 0.4, 0.4, 0.4 ).vertices ),
+					new THREE.MeshLambertMaterial( {
+						color: color,
+					} ) );
+				cube.position.copy( cubePosition );
+				cube.type = cubeType;
+				cube.userData.color = cube.material.color;
+				cube.userData.raycaster = {
 
-			],
-				{
-					onload: function () {
+					onIntersection: function ( raycaster, intersection, scene, INTERSECTED ) {
 
-						var cubeType = 'cube';
-						function addCube( cubePosition, color ) {
-
-							var cube = new THREE.Mesh( new THREE.ConvexBufferGeometry( new THREE.CubeGeometry( 0.4, 0.4, 0.4 ).vertices ),
-								new THREE.MeshLambertMaterial( {
-									color: color,
-								} ) );
-							cube.position.copy( cubePosition );
-							cube.type = cubeType;
-							cube.userData.color = cube.material.color;
-							group.add( cube );
-
-						}
-						addCube( new THREE.Vector3( -1, 0, 0 ), 0xffffff );
-						addCube( new THREE.Vector3( -0.5, 0.5, -0.5 ), 'green' );
+						if ( cube.userData.currentHex === undefined )
+							cube.userData.currentHex = cube.material.emissive.getHex();
+						cube.material.emissive.setHex( 0xff0000 );
 
 					},
-					onerror: function ( str, e ) {
+					onIntersectionOut: function ( scene, INTERSECTED ) {
 
-						console.error( str );
+						if ( cube.userData.currentHex !== undefined ) cube.material.emissive.setHex( cube.userData.currentHex );
+						cube.userData.currentHex = undefined;
+
+					},
+					onMouseDown: function ( raycaster, intersection, scene ) {
+
+						var position = raycaster.stereo.getPosition( intersection );
+						alert( 'You are clicked the "' + intersection.object.type + '" type object.'
+							+ ( intersection.index === undefined ? '' : ' Index = ' + intersection.index + '.' )
+							+ ' Position( x: ' + position.x + ', y: ' + position.y + ', z: ' + position.z + ' )' );
 
 					},
 
-				} );
+				}
+				group.add( cube );
+
+			}
+			addCube( new THREE.Vector3( -1, 0, 0 ), 0xffffff );
+			addCube( new THREE.Vector3( -0.5, 0.5, -0.5 ), 'green' );
 
 		},
 			{
 
 				elContainer: "canvasContainer1",//id of the HTMLElement for canvas and HTMLElement with id="iframe-goes-in-here" for gui.
-				orbitControls: true,//use orbit controls allow the camera to orbit around a target. https://threejs.org/docs/index.html#examples/en/controls/OrbitControls
-				stereoEffect: true,//use dat-gui JavaScript Controller Library. https://github.com/dataarts/dat.gui
+				orbitControls: OrbitControls,//use orbit controls allow the camera to orbit around a target. https://threejs.org/docs/index.html#examples/en/controls/OrbitControls
+				//orbitControlsGui: true,//displays the orbit controls gui.
+				stereoEffect: {
+
+					StereoEffect: StereoEffect,
+					spatialMultiplexsIndexs: spatialMultiplexsIndexs,
+
+				},//use stereoEffect. https://github.com/anhr/three.js/blob/dev/examples/js/effects/StereoEffect.js
 				menuPlay: true,
-				//dat: true,//use dat-gui JavaScript Controller Library. https://github.com/dataarts/dat.gui
+				dat: true,//use dat-gui JavaScript Controller Library. https://github.com/dataarts/dat.gui
 				controllerPlay: true,//use controllerPlay https://github.com/anhr/controllerPlay - my custom controller in my version of dat.gui https://github.com/anhr/dat.gui for playing of 3D obects in my projects.
 				//Available only if dat is true
 
@@ -181,6 +252,42 @@
 
 					width: window.innerWidth / 2,
 					height: window.innerHeight / 2,
+
+				},
+				axesHelper: {
+
+					scales: {
+
+						display: true,
+						/*
+						x: {
+
+							zoomMultiplier: 2,
+							positionOffset: 1,
+							name: 'Time(sec.)',
+							min: -10,
+							max: 10,
+							marks: 11,
+
+						},
+						y: {
+
+							//name: 'Temperature(degrees Celsius)',
+							min: -4,
+							max: 2,
+
+						},
+						z: {
+
+							name: 'Radius(m.)',
+							min: -110,
+							max: -100,
+							marks: 11,
+
+						},
+						*/
+
+					},
 
 				}
 
