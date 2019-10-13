@@ -1,6 +1,6 @@
 /**
  * node.js version of the controllerPlay
- * My custom controller in my version of dat.gui(https://github.com/anhr/dat.gui) for playing of 3D obects in my projects.
+ * My custom controller in my version of dat.gui(https://github.com/anhr/dat.gui) for playing of 3D objects in my projects.
  *
  * @author Andrej Hristoliubov https://anhr.github.io/AboutMe/
  * Thanks to https://stackoverflow.com/a/4797877/5175935
@@ -2545,191 +2545,152 @@ var controllers = {
   CustomController: CustomController
 };
 
+/**
+* PlayController class for using in my version of dat.gui(https://github.com/anhr/dat.gui) for playing of 3D objects in my projects.
+*
+* @author Andrej Hristoliubov https://anhr.github.io/AboutMe/
+*
+* @copyright 2011 Data Arts Team, Google Creative Lab
+*
+* @license under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*/
 var lang = {
-	prevSymbol: '←',
-	prevSymbolTitle: 'Go to previous object 3D',
-	nextSymbol: '→',
-	nextSymbolTitle: 'Go to next object 3D',
-	playSymbol: '►',
-	playTitle: 'Play',
-	pause: '❚❚',
-	pauseTitle: 'Pause',
-	repeat: '⥀',
-	repeatOn: 'Turn repeat on',
-	repeatOff: 'Turn repeat off',
-	controllerTitle: 'Rate of changing of selected of 3D objects per second.'
+				prevSymbol: '←',
+				prevSymbolTitle: 'Go to previous animation scene',
+				nextSymbol: '→',
+				nextSymbolTitle: 'Go to next animation scene',
+				playSymbol: '►',
+				playTitle: 'Play',
+				pause: '❚❚',
+				pauseTitle: 'Pause',
+				repeat: '⥀',
+				repeatOn: 'Turn repeat on',
+				repeatOff: 'Turn repeat off',
+				controllerTitle: 'Rate of changing of animation scenes per second.'
 };
-switch (typeof THREE === 'undefined' || typeof THREE.getLanguageCode === 'undefined' ? 'en' : THREE.getLanguageCode()) {
-	case 'ru':
-		lang.prevSymbolTitle = 'Выбрать предыдущий 3D объект';
-		lang.playTitle = 'Проиграть';
-		lang.nextSymbolTitle = 'Выбрать следующий 3D объект';
-		lang.pauseTitle = 'Пауза';
-		lang.repeatOn = 'Повторять проигрывание';
-		lang.repeatOff = 'Остановить повтор проигрывания';
-		lang.controllerTitle = 'Скорость выбора 3D объекта в секунду.';
-		break;
+switch (getLanguageCode()) {
+				case 'ru':
+								lang.prevSymbolTitle = 'Кадр назад';
+								lang.playTitle = 'Проиграть';
+								lang.nextSymbolTitle = 'Кадр вперед';
+								lang.pauseTitle = 'Пауза';
+								lang.repeatOn = 'Повторять проигрывание';
+								lang.repeatOff = 'Остановить повтор проигрывания';
+								lang.controllerTitle = 'Скорость смены кадров в секунду.';
+								break;
 }
 function addButton(innerHTML, title, onclick) {
-	var button = document.createElement('span');
-	button.innerHTML = innerHTML;
-	button.title = title;
-	button.style.cursor = 'pointer';
-	button.style.margin = '0px 2px';
-	button.onclick = onclick;
-	return button;
+				var button = document.createElement('span');
+				button.innerHTML = innerHTML;
+				button.title = title;
+				button.style.cursor = 'pointer';
+				button.style.margin = '0px 2px';
+				button.onclick = onclick;
+				return button;
 }
 var PlayController = function (_controllers$CustomCo) {
-	inherits(PlayController, _controllers$CustomCo);
-	function PlayController(group, events) {
-		classCallCheck(this, PlayController);
-		events = events || {};
-		var _playNext, _prev, _play, _repeat, _next, _getGroup, _selectObject3D;
-		var _this2 = possibleConstructorReturn(this, (PlayController.__proto__ || Object.getPrototypeOf(PlayController)).call(this, {
-			playRate: 1,
-			property: function property(customController) {
-				var buttons = {};
-				function RenamePlayButtons(innerHTML, title, play) {
-					buttons.buttonPlay.innerHTML = innerHTML;
-					buttons.buttonPlay.title = title;
-					if (events.onRenamePlayButton !== undefined) events.onRenamePlayButton(innerHTML, title, play);
+				inherits(PlayController, _controllers$CustomCo);
+				function PlayController(player) {
+								classCallCheck(this, PlayController);
+								var _getGroup, _selectScene, _renamePlayButtons, _renameRepeatButtons;
+								var colorOff = 'rgb(255,255,255)',
+								    colorOn = 'rgb(128,128,128)';
+								var _this2 = possibleConstructorReturn(this, (PlayController.__proto__ || Object.getPrototypeOf(PlayController)).call(this, {
+												playRate: 1,
+												property: function property(customController) {
+																var buttons = {};
+																function RenamePlayButtons(innerHTML, title) {
+																				buttons.buttonPlay.innerHTML = innerHTML;
+																				buttons.buttonPlay.title = title;
+																}
+																_renamePlayButtons = RenamePlayButtons;
+																buttons.buttonPrev = addButton(lang.prevSymbol, lang.prevSymbolTitle, player.prev);
+																buttons.buttonPlay = addButton(lang.playSymbol, lang.playTitle, player.play3DObject);
+																function RenameRepeatButtons(isRepeat) {
+																				var title, color$$1;
+																				if (isRepeat) {
+																								title = lang.repeatOff;
+																								color$$1 = colorOff;
+																				} else {
+																								title = lang.repeatOn;
+																								color$$1 = colorOn;
+																				}
+																				if (buttons.buttonRepeat.title === title) return;
+																				buttons.buttonRepeat.title = title;
+																				buttons.buttonRepeat.style.color = color$$1;
+																				player.onChangeRepeat(isRepeat);
+																}
+																_renameRepeatButtons = RenameRepeatButtons;
+																function repeat(value) {
+																				RenameRepeatButtons(buttons.buttonRepeat.title === lang.repeatOn);
+																}
+																var title, color$$1;
+																if (player.getOptions().repeat) {
+																				title = lang.repeatOff;
+																				color$$1 = colorOff;
+																} else {
+																				title = lang.repeatOn;
+																				color$$1 = colorOn;
+																}
+																buttons.buttonRepeat = addButton(lang.repeat, title, repeat);
+																buttons.buttonRepeat.style.color = color$$1;
+																buttons.buttonNext = addButton(lang.nextSymbol, lang.nextSymbolTitle, player.next);
+																function getGroup() {
+																				return group;
+																}
+																_getGroup = getGroup;
+																return buttons;
+												}
+								}, 'playRate', 1, 25, 1));
+								_this2.onRenamePlayButtons = function (playing) {
+												var name, title;
+												if (playing) {
+																name = lang.pause;
+																title = lang.pauseTitle;
+												} else {
+																name = lang.playSymbol;
+																title = lang.playTitle;
+												}
+												_renamePlayButtons(name, title, true);
+								};
+								_this2.onChangeRepeat = function () {
+												_renameRepeatButtons(player.getOptions().repeat);
+								};
+								player.controllers.push(_this2);
+								_this2.onChange = function (value) {
+												player.onChangeTimerId(value);
+								};
+								_this2.getGroup = function () {
+												return _getGroup();
+								};
+								_this2.selectScene = function (index) {
+												_selectScene(parseInt(index));
+								};
+								return _this2;
 				}
-				var selectObject3DIndex = -1;
-				function play() {
-					if (selectObject3DIndex === -1 || selectObject3DIndex === group.children.length) {
-						selectObject3DIndex = 0;
-					}
-					for (var i = 0; i < group.children.length; i++) {
-						var objects3DItem = group.children[i];
-						if (selectObject3DIndex === i) {
-							if (events.onShowObject3D !== undefined) events.onShowObject3D(objects3DItem, selectObject3DIndex);
-						} else {
-							if (events.onHideObject3D !== undefined) events.onHideObject3D(objects3DItem);
-						}
-					}
-				}
-				function pause() {
-					for (var i = 0; i < group.children.length; i++) {
-						var objects3DItem = group.children[i];
-						if (events.onRestoreObject3D !== undefined) events.onRestoreObject3D(objects3DItem);
-					}
-					RenamePlayButtons(lang.playSymbol, lang.playTitle);
-					clearInterval(group.userData.timerId);
-					group.userData.timerId = undefined;
-				}
-				function isRepeat() {
-					return buttons.buttonRepeat.title !== lang.repeatOn;
-				}
-				function playNext() {
-					selectObject3DIndex++;
-					if (selectObject3DIndex >= group.children.length) {
-						if (isRepeat()) selectObject3DIndex = 0;else {
-							pause();
-							return;
-						}
-					}
-					play();
-				}
-				_playNext = playNext;
-				function prev() {
-					selectObject3D(selectObject3DIndex - 1);
-				}
-				_prev = prev;
-				buttons.buttonPrev = addButton(lang.prevSymbol, lang.prevSymbolTitle, prev);
-				function play3DObject(value) {
-					if (buttons.buttonPlay.innerHTML === lang.playSymbol) {
-						group.userData.timerId = -1;
-						play(group, events);
-						RenamePlayButtons(lang.pause, lang.pauseTitle, true);
-						group.userData.timerId = setInterval(playNext, 1000 / (typeof customController.controller === 'undefined' ? 1 : customController.controller.getValue()));
-					} else pause();
-				}
-				_play = play3DObject;
-				buttons.buttonPlay = addButton(lang.playSymbol, lang.playTitle, play3DObject);
-				var colorGray = 'rgb(200,200,200)';
-				function repeat(value) {
-					function RenameRepeatButtons(title, color$$1) {
-						buttons.buttonRepeat.title = title;
-						buttons.buttonRepeat.style.color = color$$1;
-						if (events.onRenameRepeatButton !== undefined) events.onRenameRepeatButton(title, color$$1);
-					}
-					if (buttons.buttonRepeat.title === lang.repeatOn) {
-						RenameRepeatButtons(lang.repeatOff, 'rgb(255,255,255)');
-					} else {
-						RenameRepeatButtons(lang.repeatOn, colorGray);
-					}
-				}
-				_repeat = repeat;
-				buttons.buttonRepeat = addButton(lang.repeat, lang.repeatOn, repeat);
-				function next(value) {
-					selectObject3D(selectObject3DIndex + 1);
-				}
-				_next = next;
-				buttons.buttonNext = addButton(lang.nextSymbol, lang.nextSymbolTitle, next);
-				function selectObject3D(index) {
-					if (selectObject3DIndex === -1) selectObject3DIndex = group.children.length;
-					var objects3DItem = group.children[selectObject3DIndex];
-					if (objects3DItem !== undefined) {
-						if (events.onRestoreObject3D !== undefined) events.onRestoreObject3D(objects3DItem);
-					}
-					selectObject3DIndex = index;
-					if (selectObject3DIndex >= group.children.length) selectObject3DIndex = 0;
-					if (selectObject3DIndex < 0) selectObject3DIndex = group.children.length - 1;
-					objects3DItem = group.children[selectObject3DIndex];
-					if (events.onSelectedObject3D !== undefined) events.onSelectedObject3D(objects3DItem, selectObject3DIndex);
-				}
-				_selectObject3D = selectObject3D;
-				function getGroup() {
-					return group;
-				}
-				_getGroup = getGroup;
-				return buttons;
-			}
-		}, 'playRate', 1, 25, 1));
-		_this2.onChange = function (value) {
-			if (group.userData.timerId === undefined) return;
-			clearInterval(group.userData.timerId);
-			group.userData.timerId = setInterval(_playNext, 1000 / value);
-		};
-		_this2.prev = function () {
-			_prev();
-		};
-		_this2.play = function () {
-			_play();
-		};
-		_this2.repeat = function () {
-			_repeat();
-		};
-		_this2.next = function () {
-			_next();
-		};
-		_this2.getGroup = function () {
-			return _getGroup();
-		};
-		_this2.selectObject3D = function (index) {
-			_selectObject3D(parseInt(index));
-		};
-		return _this2;
-	}
-	createClass(PlayController, [{
-		key: 'controller',
-		set: function set$$1(newController) {
-			this._controller = newController;
-			var _this = this;
-			this._controller.onChange(function (value) {
-				_this.onChange(value);
-			});
-			this._controller.domElement.title = lang.controllerTitle;
-		},
-		get: function get$$1() {
-			return this._controller;
-		}
-	}]);
-	return PlayController;
+				createClass(PlayController, [{
+								key: 'controller',
+								set: function set$$1(newController) {
+												this._controller = newController;
+												var _this = this;
+												this._controller.onChange(function (value) {
+																_this.onChange(value);
+												});
+												this._controller.domElement.title = lang.controllerTitle;
+								},
+								get: function get$$1() {
+												return this._controller;
+								}
+				}]);
+				return PlayController;
 }(controllers.CustomController);
-function create(group, events) {
-	return new PlayController(group, events);
+function create(player) {
+				return new PlayController(player);
 }
 
-export { lang, create };
+export { lang, PlayController, create };
 //# sourceMappingURL=controllerPlay.module.js.map

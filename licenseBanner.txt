@@ -1,6 +1,6 @@
 /**
  * node.js version of the controllerPlay
- * My custom controller in my version of dat.gui(https://github.com/anhr/dat.gui) for playing of 3D obects in my projects.
+ * My custom controller in my version of dat.gui(https://github.com/anhr/dat.gui) for playing of 3D objects in my projects.
  *
  * @author Andrej Hristoliubov https://anhr.github.io/AboutMe/
  * Thanks to https://stackoverflow.com/a/4797877/5175935

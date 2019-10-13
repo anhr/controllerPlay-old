@@ -22,3 +22,17 @@ d:
 cd "D:\My documents\MyProjects\webgl\three.js\GitHub\nodejs\controllerPlay"
 npm install
 npm run build
+
+ERROR
+------------
+Error: Couldn't find preset "env" relative to directory  "D:\\My documents\\MyProjects\\webgl\\three.js\\GitHub\\nodejs\\commonNodeJS"
+
+Заменить относительный путь
+
+import OrbitControlsGui from '../commonNodeJS/OrbitControlsGui.js';
+
+На абсолютный
+
+import OrbitControlsGui from 'http://localhost/threejs/nodejs/commonNodeJS/OrbitControlsGui.js';
+
+
