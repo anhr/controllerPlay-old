@@ -15,9 +15,9 @@
 //import { GUI, controllers } from 'D:/My documents/MyProjects/webgl/three.js/GitHub/dat.gui';
 //Please download https://github.com/anhr/dat.gui/tree/CustomController to '../../dat.gui' folder
 //import { GUI, controllers } from '../../dat.gui';
-import { GUI, controllers } from '../../dat.gui/build/dat.gui.module.js';
+import { GUI, controllers } from '../../../dat.gui/build/dat.gui.module.js';
 
-import { getLanguageCode } from '../commonNodeJS/lang.js';
+import { getLanguageCode } from '../../commonNodeJS/lang.js';
 
 //Localization
 
