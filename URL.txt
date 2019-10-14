@@ -10,8 +10,8 @@ SCRIPT5009: 'controllerPlay' is undefined
 html (553,4)
 ---------------------------------------------------------
 test page
-https://raw.githack.com/anhr/DropdownMenu/master/Examples/html/
-http://localhost/DropdownMenu/Examples/html/
+https://raw.githack.com/anhr/controllerPlay/master/Examples/html/
+http://localhost/threejs/nodejs/controllerPlay/master/Examples/html/
 -------------------------------------------
 Building menu
 
