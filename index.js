@@ -17,7 +17,7 @@
 //import { GUI, controllers } from '../../dat.gui';
 import { GUI, controllers } from '../../dat.gui/master/build/dat.gui.module.js';
 
-import { getLanguageCode } from '../../commonNodeJS/lang.js';
+import { getLanguageCode } from '../../commonNodeJS/master/lang.js';
 
 //Localization
 
