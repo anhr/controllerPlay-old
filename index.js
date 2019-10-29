@@ -94,8 +94,6 @@ export class PlayController extends controllers.CustomController {
 	 */
 	constructor( player ) {
 
-//		scenesCount = scenesCount || 2;
-//		events = events || {};
 		var _getGroup, _selectScene, _renamePlayButtons, _renameRepeatButtons, _repeat;//,_playNext, timerId, _prev, _play, _next;
 		var colorOff = 'rgb(255,255,255)', colorOn = 'rgb(128,128,128)';//'rgb(200,200,200)';
 		super( {
@@ -108,97 +106,11 @@ export class PlayController extends controllers.CustomController {
 
 					buttons.buttonPlay.innerHTML = innerHTML;
 					buttons.buttonPlay.title = title;
-/*
-					if ( events.onRenamePlayButton !== undefined )
-						events.onRenamePlayButton( innerHTML, title, play );
-*/
 
 				}
 				_renamePlayButtons = RenamePlayButtons;
 
-/*
-				var selectSceneIndex = 0;//-1;
-				function play() {
-
-					//show of selected object3D and hide others
-					//if ( ( selectSceneIndex === -1 ) || ( selectSceneIndex === group.children.length ) )
-					if ( ( selectSceneIndex === -1 ) || ( selectSceneIndex === scenesCount ) ){
-
-						selectSceneIndex = 0;
-
-					}
-					onSelectScene( selectSceneIndex );
-
-				}
-*/
-/*
-				function pause() {
-
-					RenamePlayButtons( lang.playSymbol, lang.playTitle );
-
-					clearInterval( timerId );
-					timerId = undefined;
-
-				}
-				function isRepeat() {
-
-					return buttons.buttonRepeat.title !== lang.repeatOn;
-
-				}
-				_isRepeat = isRepeat;
-*/
-/*
-				function playNext() {
-
-					selectSceneIndex++;
-					if ( selectSceneIndex >= scenesCount ) {
-
-						if ( isRepeat() )
-							selectSceneIndex = 0;
-						else {
-
-							pause();
-							return;
-
-						}
-
-					}
-					play();
-
-				}
-				_playNext = playNext;
-*/
-/*
-				//Go to previous object 3D button
-				function prev() {
-
-					selectScene( selectSceneIndex - 1 );
-
-				}
-				_prev = prev;
-*/
 				buttons.buttonPrev = addButton( lang.prevSymbol, lang.prevSymbolTitle, player.prev );
-/*
-				//Play/Pause button
-				function play3DObject( value ) {
-
-					if ( buttons.buttonPlay.innerHTML === lang.playSymbol ) {
-
-						timerId = -1;
-//						play( group, events );
-//						play();
-						if ( selectSceneIndex >= scenesCount )
-							selectSceneIndex = -1;
-						playNext();
-						RenamePlayButtons( lang.pause, lang.pauseTitle, true );
-						timerId = setInterval( playNext,
-							1000 / ( typeof customController.controller === 'undefined' ? 1 : customController.controller.getValue() ) );
-
-					} else pause();
-
-				}
-				_play = play3DObject;
-*/
 				buttons.buttonPlay = addButton( lang.playSymbol, lang.playTitle, player.play3DObject );
 
 				//Repeat button
@@ -272,20 +184,6 @@ export class PlayController extends controllers.CustomController {
 				_next = next;
 */
 				buttons.buttonNext = addButton( lang.nextSymbol, lang.nextSymbolTitle, player.next );
-/*
-				//select scene for playing
-				function selectScene( index ) {
-
-					if ( index >= scenesCount )
-						index = 0;
-					else if ( index < 0 )
-						index = scenesCount - 1;
-					selectSceneIndex = index;
-					onSelectScene( index );
-
-				}
-				_selectScene = selectScene;
-*/
 				function getGroup() {
 
 					return group;
@@ -373,10 +271,3 @@ export function create( player ) {
 	return new PlayController( player );
 
 }
-/*
-export function create( scenesCount, onSelectScene, events ) {
-
-	return new PlayController( scenesCount, onSelectScene, events );
-
-}
-*/
