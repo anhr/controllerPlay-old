@@ -19,6 +19,11 @@ or
 <script src="https://raw.githack.com/anhr/loadScriptNodeJS/master/build/loadScript.min.js"></script>
 <script src="https://raw.githack.com/anhr/controllerPlay/master/build/controllerPlay.min.js"></script>
 ```
+or you can import controllerPlay from controllerPlay.js file in your JavaScript module. [Example.](https://raw.githack.com/anhr/myThreejs/master/Examples/html/)
+```
+import controllerPlay from 'https://raw.githack.com/anhr/controllerPlay/master/controllerPlay.js';
+
+```
 
 Now you can use window.controllerPlay for append to the dat.gui.
 
