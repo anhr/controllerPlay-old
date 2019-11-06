@@ -19,7 +19,7 @@ Open "Node.js command prompt"
 
 d:
 //cd "D:\WebFeatures\GoogleSite\nodejs\controllerPlay"
-cd "D:\My documents\MyProjects\webgl\three.js\GitHub\nodejs\controllerPlay"
+cd "D:\My documents\MyProjects\webgl\three.js\GitHub\controllerPlay\master"
 npm install
 npm run build
 

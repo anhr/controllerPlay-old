@@ -2546,6 +2546,41 @@ var controllers = {
 };
 
 /**
+ * Localization.
+ *
+ * @author Andrej Hristoliubov https://anhr.github.io/AboutMe/
+ *
+ * @copyright 2011 Data Arts Team, Google Creative Lab
+ *
+ * @license under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ */
+function getLanguageCode() {
+  function _getLocale() {
+    if (!navigator) {
+      console.error("getLocale() failed! !navigator");
+      return "";
+    }
+    if (navigator.languages !== undefined && typeof navigator.languages !== 'unknown' && navigator.languages.length > 0) return navigator.languages[0];
+    if (navigator.language) {
+      return navigator.language;
+    } else if (navigator.browserLanguage) {
+      return navigator.browserLanguage;
+    } else if (navigator.systemLanguage) {
+      return navigator.systemLanguage;
+    } else if (navigator.userLanguage) {
+      return navigator.userLanguage;
+    }
+    console.error("getLocale() failed!");
+    return "";
+  }
+  return _getLocale().toLowerCase().match(/([a-z]+)(?:-([a-z]+))?/)[1];
+}
+
+/**
 * PlayController class for using in my version of dat.gui(https://github.com/anhr/dat.gui) for playing of 3D objects in my projects.
 *
 * @author Andrej Hristoliubov https://anhr.github.io/AboutMe/
@@ -2570,7 +2605,13 @@ var lang = {
 				repeat: '⥀',
 				repeatOn: 'Turn repeat on',
 				repeatOff: 'Turn repeat off',
-				controllerTitle: 'Rate of changing of animation scenes per second.'
+				controllerTitle: 'Rate of changing of animation scenes per second.',
+				fullScreen: 'Full Screen',
+				nonFullScreen: 'Non Full Screen',
+				stereoEffects: 'Stereo effects',
+				mono: 'Mono',
+				sideBySide: 'Side by side',
+				topAndBottom: 'Top and bottom'
 };
 switch (getLanguageCode()) {
 				case 'ru':
@@ -2581,6 +2622,12 @@ switch (getLanguageCode()) {
 								lang.repeatOn = 'Повторять проигрывание';
 								lang.repeatOff = 'Остановить повтор проигрывания';
 								lang.controllerTitle = 'Скорость смены кадров в секунду.';
+								lang.fullScreen = 'На весь экран';
+								lang.nonFullScreen = 'Восстановить размеры экрана';
+								lang.stereoEffects = 'Стерео эффекты';
+								lang.mono = 'Моно';
+								lang.sideBySide = 'Слева направо';
+								lang.topAndBottom = 'Сверху вниз';
 								break;
 }
 function addButton(innerHTML, title, onclick) {
@@ -2660,7 +2707,7 @@ var PlayController = function (_controllers$CustomCo) {
 								_this2.onChangeRepeat = function () {
 												_renameRepeatButtons(player.getOptions().repeat);
 								};
-								player.controllers.push(_this2);
+								player.pushController(_this2);
 								_this2.onChange = function (value) {
 												player.onChangeTimerId(value);
 								};

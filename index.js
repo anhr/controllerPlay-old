@@ -17,7 +17,9 @@
 //import { GUI, controllers } from '../../dat.gui';
 import { GUI, controllers } from '../../dat.gui/CustomController/build/dat.gui.module.js';
 
-import { getLanguageCode } from '../../commonNodeJS/master/lang.js';
+import { getLanguageCode } from '../../commonNodeJS/master/build/lang.module.js';
+//import { getLanguageCode } from '../../commonNodeJS/master/lang.js';
+//import { getLanguageCode } from 'http://localhost/anhr/commonNodeJS/master/lang.js';
 
 //Localization
 
@@ -44,27 +46,29 @@ export var lang = {
 
 };
 
-//switch ( ( ( typeof THREE === 'undefined' ) || ( typeof THREE.getLanguageCode === 'undefined' ) ) ? 'en' : THREE.getLanguageCode() )
-switch ( getLanguageCode() ) {
+//try {
+	//switch ( ( ( typeof THREE === 'undefined' ) || ( typeof THREE.getLanguageCode === 'undefined' ) ) ? 'en' : THREE.getLanguageCode() )
+	switch ( getLanguageCode() ) {
 
-	case 'ru'://Russian language
-		lang.prevSymbolTitle = 'Кадр назад';//'Go to previous animation scene',
-		lang.playTitle = 'Проиграть';//'Play'
-		lang.nextSymbolTitle = 'Кадр вперед';//'Go to next animation scene';
-		lang.pauseTitle = 'Пауза';//'Pause',
-		lang.repeatOn = 'Повторять проигрывание';
-		lang.repeatOff = 'Остановить повтор проигрывания';
-		lang.controllerTitle = 'Скорость смены кадров в секунду.';
-		lang.fullScreen = 'На весь экран';
-		lang.nonFullScreen = 'Восстановить размеры экрана';
-		lang.stereoEffects = 'Стерео эффекты';
-		lang.mono = 'Моно';
-		lang.sideBySide = 'Слева направо';
-		lang.topAndBottom = 'Сверху вниз';
+		case 'ru'://Russian language
+			lang.prevSymbolTitle = 'Кадр назад';//'Go to previous animation scene',
+			lang.playTitle = 'Проиграть';//'Play'
+			lang.nextSymbolTitle = 'Кадр вперед';//'Go to next animation scene';
+			lang.pauseTitle = 'Пауза';//'Pause',
+			lang.repeatOn = 'Повторять проигрывание';
+			lang.repeatOff = 'Остановить повтор проигрывания';
+			lang.controllerTitle = 'Скорость смены кадров в секунду.';
+			lang.fullScreen = 'На весь экран';
+			lang.nonFullScreen = 'Восстановить размеры экрана';
+			lang.stereoEffects = 'Стерео эффекты';
+			lang.mono = 'Моно';
+			lang.sideBySide = 'Слева направо';
+			lang.topAndBottom = 'Сверху вниз';
 
-		break;
+			break;
 
-}
+	}
+//} catch ( e ) {}
 
 function addButton( innerHTML, title, onclick ) {
 
