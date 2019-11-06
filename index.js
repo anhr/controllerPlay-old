@@ -17,8 +17,8 @@
 //import { GUI, controllers } from '../../dat.gui';
 import { GUI, controllers } from '../../dat.gui/CustomController/build/dat.gui.module.js';
 
-import { getLanguageCode } from '../../commonNodeJS/master/build/common.module.js';
-//import { getLanguageCode } from '../../commonNodeJS/master/lang.js';
+//import { getLanguageCode } from '../../commonNodeJS/master/build/common.module.js';
+import { getLanguageCode } from '../../commonNodeJS/master/lang.js';
 //import { getLanguageCode } from 'http://localhost/anhr/commonNodeJS/master/lang.js';
 
 //Localization
