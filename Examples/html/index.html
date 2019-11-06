@@ -3,7 +3,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta charset="utf-8" />
-	<title>myThreejs</title>
+	<title>controllerPlay</title>
 
 	<!--for mobile devices-->
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
@@ -16,9 +16,11 @@
 	<!--<script src="build/loadScript.min.js"></script>-->
 
 	<!--<script src="https://raw.githack.com/anhr/three.js/dev/examples/js/libs/dat.gui.js"></script>-->
-	<script src="https://raw.githack.com/anhr/three.js/dev/examples/js/libs/dat.gui.min.js"></script>
+	<!--<script src="https://raw.githack.com/anhr/three.js/dev/examples/js/libs/dat.gui.min.js"></script>-->
 	<!--<script src="../../../../three.js/examples/js/libs/dat.gui.min.js"></script>-->
 	<!--<script src="../../../../three.js/examples/js/libs/dat.gui.js"></script>-->
+	<script src="/anhr/three.js/dev/examples/js/libs/dat.gui.js"></script>
+	<script src="/anhr/commonNodeJS/master/dat.js"></script>
 
 	<!--<script src="http://localhost/threejs/three.js/src/objects/SpriteText.js"></script>-->
 
@@ -130,8 +132,9 @@
 			}
 			points.userData.selectPlayScene = function ( t, setAttributes ) {
 
-//				setAttributes( points.geometry.attributes, t, arrayFuncs, a, b );
-				setAttributes( a, b );
+				var angle = t * Math.PI * 2 * 1.2;
+				points.rotation.set( angle, 0, 0 );
+				myThreejs.limitAngles( points.rotation );
 
 			}
 			points.position.copy( new Vector3( 0.1, 0.2, 0.3 ) );
