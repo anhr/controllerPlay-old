@@ -1,4 +1,4 @@
-﻿/**
+/**
  * PlayController class for using in my version of dat.gui(https://github.com/anhr/dat.gui) for playing of 3D objects in my projects.
  * 
  * @author Andrej Hristoliubov https://anhr.github.io/AboutMe/
@@ -200,6 +200,7 @@ export class PlayController extends controllers.CustomController {
 			},
 
 		}, 'playRate', 1, 25, 1 );
+		player.PlayController = this;
 /*
 		player.getOptions().controllers.push( function ( playing ) {
 
@@ -245,6 +246,11 @@ export class PlayController extends controllers.CustomController {
 		this.selectScene = function ( index ) {
 
 			_selectScene( parseInt( index ) );
+
+		}
+		this.setValue = function ( value ) {
+
+			this._controller.setValue( value );
 
 		}
 
