@@ -228,7 +228,7 @@ export class PlayController extends controllers.CustomController {
 		}
 		this.onChangeRepeat = function () {
 
-			_renameRepeatButtons( player.getOptions().repeat );
+			_renameRepeatButtons( player.getSettings().repeat );
 
 		}
 //		player.controllers.push( this );
