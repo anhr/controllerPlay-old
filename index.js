@@ -147,19 +147,6 @@ export class PlayController extends controllers.CustomController {
 				function repeat( value ) {
 
 					RenameRepeatButtons( buttons.buttonRepeat.title === lang.repeatOn );
-/*
-					if ( buttons.buttonRepeat.title === lang.repeatOn ) {
-
-						isRepeat = true;
-						RenameRepeatButtons( lang.repeatOff, colorOff );
-
-					} else {
-
-						isRepeat = false;
-						RenameRepeatButtons( lang.repeatOn, colorOn );
-
-					}
-*/
 
 				}
 				_repeat = repeat;
@@ -177,16 +164,6 @@ export class PlayController extends controllers.CustomController {
 				}
 				buttons.buttonRepeat = addButton( lang.repeat, title, repeat );
 				buttons.buttonRepeat.style.color = color;
-/*
-				//Go to next object 3D button
-				function next( value ) {
-
-					player.selectScene( selectSceneIndex + 1 );
-//					selectScene( selectSceneIndex + 1 );
-
-				}
-				_next = next;
-*/
 				buttons.buttonNext = addButton( lang.nextSymbol, lang.nextSymbolTitle, player.next );
 				function getGroup() {
 
@@ -201,14 +178,6 @@ export class PlayController extends controllers.CustomController {
 
 		}, 'playRate', 1, 25, 1 );
 		player.PlayController = this;
-/*
-		player.getOptions().controllers.push( function ( playing ) {
-
-			_renamePlayButtons( lang.pause, lang.pauseTitle, true );
-
-		});
-*/
-//		this.isRepeat = function () { return _isRepeat(); }
 		this.onRenamePlayButtons = function ( playing ) {
 
 			var name, title;
@@ -231,7 +200,6 @@ export class PlayController extends controllers.CustomController {
 			_renameRepeatButtons( player.getSettings().repeat );
 
 		}
-//		player.controllers.push( this );
 		player.pushController( this );
 		this.onChange = function ( value ){
 
@@ -257,9 +225,7 @@ export class PlayController extends controllers.CustomController {
 	}
 	set controller( newController ) {
 
-//		super.controller = newController;
 		this._controller = newController;
-//		this._controller = newController;
 		var _this = this;
 		this._controller.onChange( function ( value ) {
 
