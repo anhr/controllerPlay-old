@@ -113,7 +113,7 @@
 			var points = new Points( new BufferGeometry().setFromPoints( options.getPoints( tMin, arrayFuncs, a, b ), 4 ),
 				new PointsMaterial( { size: 0.05, vertexColors: VertexColors } ) );
 			points.name = 'Wave';
-			points.geometry.addAttribute( 'color', new Float32BufferAttribute( options.getСolors( tMin, arrayFuncs, options.scales.w ), 3 ) );
+			points.geometry.addAttribute( 'color', new Float32BufferAttribute( options.getColors( tMin, arrayFuncs, options.scales.w ), 3 ) );
 //			points.userData.color = points.material.color;
 			points.userData.arrayFuncs = arrayFuncs;
 			points.userData.raycaster = {
@@ -147,7 +147,7 @@
 			]
 			points = new Points( new BufferGeometry().setFromPoints( options.getPoints( tMin, arrayFuncs, a, b ), 4 ),
 				new PointsMaterial( { size: 0.05, vertexColors: VertexColors } ) );
-			points.geometry.addAttribute( 'color', new Float32BufferAttribute( options.getСolors( tMin, arrayFuncs, options.scales.w ), 3 ) );
+			points.geometry.addAttribute( 'color', new Float32BufferAttribute( options.getColors( tMin, arrayFuncs, options.scales.w ), 3 ) );
 			group.add( points );
 
 			//cubes
