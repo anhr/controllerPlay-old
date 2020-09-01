@@ -11,7 +11,7 @@
 	<meta name="author" content="Andrej Hristoliubov https://anhr.github.io/AboutMe/">
 
 	<!--<script src="https://raw.githack.com/anhr/loadScriptNodeJS/master/build/loadScript.js"></script>-->
-	<script src="https://raw.githack.com/anhr/loadScriptNodeJS/master/build/loadScript.min.js"></script>
+	<!--<script src="https://raw.githack.com/anhr/loadScriptNodeJS/master/build/loadScript.min.js"></script>-->
 	<!--<script src="../../../loadScriptNodeJS/master/build/loadScript.js"></script>-->
 	<!--<script src="build/loadScript.min.js"></script>-->
 
@@ -19,8 +19,8 @@
 	<!--<script src="https://raw.githack.com/anhr/three.js/dev/examples/js/libs/dat.gui.min.js"></script>-->
 	<!--<script src="../../../../three.js/examples/js/libs/dat.gui.min.js"></script>-->
 	<!--<script src="../../../../three.js/examples/js/libs/dat.gui.js"></script>-->
-	<script src="/anhr/three.js/dev/examples/js/libs/dat.gui.js"></script>
-	<script src="/anhr/commonNodeJS/master/dat.js"></script>
+	<!--<script src="/anhr/three.js/dev/examples/js/libs/dat.gui.js"></script>-->
+	<!--<script src="/anhr/commonNodeJS/master/dat.js"></script>-->
 
 	<!--<script src="http://localhost/threejs/three.js/src/objects/SpriteText.js"></script>-->
 
@@ -43,7 +43,8 @@
 	<script nomodule>alert( 'Fatal error: Your browser do not support modular JavaScript code.' );</script>
 	<script type="module">
 
-		//import * as THREE from '../../../../three.js/build/three.module.js';
+		//import * as THREE from '../../../../three.js/dev/build/three.module.js';
+		/*
 		import {
 
 			Vector2,
@@ -60,12 +61,21 @@
 			MeshLambertMaterial,
 
 		} from '../../../../three.js/dev/build/three.module.js';
+		*/
+
 		import { OrbitControls } from '../../../../three.js/dev/examples/jsm/controls/OrbitControls.js';
-		import { ConvexBufferGeometry } from '../../../../three.js/dev/examples/jsm/geometries/ConvexGeometry.js';
-		import { StereoEffect, spatialMultiplexsIndexs } from '../../../../three.js/dev/examples/jsm/effects/StereoEffect.js';
-		import myThreejs from '../../../../myThreejs/master/myThreejs.js';
+
+//		import { ConvexBufferGeometry } from '../../../../three.js/dev/examples/jsm/geometries/ConvexGeometry.js';
+
+//		import { StereoEffect, spatialMultiplexsIndexs } from '../../../../three.js/dev/examples/jsm/effects/StereoEffect.js';
+		import { StereoEffect, spatialMultiplexsIndexs } from '../../../../commonNodeJS/master/StereoEffect/StereoEffect.js';//https://github.com/anhr/commonNodeJS
+		//import { StereoEffect, spatialMultiplexsIndexs } from 'https://raw.githack.com/anhr/commonNodeJS/master/StereoEffect/StereoEffect.js';
+
+		//import myThreejs from '../../../../myThreejs/master/myThreejs.js';
+		import { myThreejs, THREE, WEBGL, ConvexBufferGeometry } from '../../../../myThreejs/master/myThreejs.js';
+
 //		import ColorPicker from '../../../colorpicker/master/colorpicker.js';
-		import { WEBGL } from '../../../../three.js/dev/examples/jsm/WebGL.js';
+//		import { WEBGL } from '../../../../three.js/dev/examples/jsm/WebGL.js';
 
 		if ( WEBGL.isWebGLAvailable() === false ) {
 
@@ -94,11 +104,11 @@
 			var a = 1, b = 0.2;
 			var tMin = playerOptions.min === undefined ? 0 : playerOptions.min;
 			var arrayFuncs = [
-//				new Vector2( 1, 1 ),//2D point
-				//new Vector2( 1, [{t:0,v:1}] ),//2D point. Array
-				new Vector2( new Function( 't', 'a', 'b', 'return 1' ), 1 ),//2D point
-//				new Vector3( -0.5, 0.5, -1 ),//3D point
-				new Vector4(
+//				new THREE.Vector2( 1, 1 ),//2D point
+				//new THREE.Vector2( 1, [{t:0,v:1}] ),//2D point. Array
+				new THREE.Vector2( new Function( 't', 'a', 'b', 'return 1' ), 1 ),//2D point
+//				new THREE.Vector3( -0.5, 0.5, -1 ),//3D point
+				new THREE.Vector4(
 					new Function( 't', 'a', 'b', 'return Math.sin(t*a*2*Math.PI)*0.5+b' ),//x
 					new Function( 't', 'a', 'b', 'return Math.cos(t*a*2*Math.PI)*0.5-b' ),//y
 					//new Function( 't', 'a', 'b', 'return 0' ),
@@ -106,14 +116,14 @@
 					new Function( 't', 'a', 'b', 'return Math.cos(t*a*2*Math.PI)*0.5-0.1' ),//z
 					new Function( 't', 'return 1-2*t' )//w
 				),//Animated 3D point
-//				new Vector4( -1.5, 0.5, 1, 25 ),//4D point. white color
-				new Vector4( 0, 0, 0, new Function( 't', 'return 1-2*t' ) ),//color is f(t)
-				new Vector4( 0.25, 0, 0, new Color( "rgb(255, 127, 0)" ) ),//yellow point
+//				new THREE.Vector4( -1.5, 0.5, 1, 25 ),//4D point. white color
+				new THREE.Vector4( 0, 0, 0, new Function( 't', 'return 1-2*t' ) ),//color is f(t)
+				new THREE.Vector4( 0.25, 0, 0, new THREE.Color( "rgb(255, 127, 0)" ) ),//yellow point
 			]
-			var points = new Points( new BufferGeometry().setFromPoints( options.getPoints( tMin, arrayFuncs, a, b ), 4 ),
-				new PointsMaterial( { size: 0.05, vertexColors: VertexColors } ) );
+			var points = new THREE.Points( new THREE.BufferGeometry().setFromPoints( options.getPoints( tMin, arrayFuncs, a, b ), 4 ),
+				new THREE.PointsMaterial( { size: 0.05, vertexColors: THREE.VertexColors } ) );
 			points.name = 'Wave';
-			points.geometry.addAttribute( 'color', new Float32BufferAttribute( options.getColors( tMin, arrayFuncs, options.scales.w ), 3 ) );
+			points.geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( options.getColors( tMin, arrayFuncs, options.scales.w ), 3 ) );
 //			points.userData.color = points.material.color;
 			points.userData.arrayFuncs = arrayFuncs;
 			points.userData.raycaster = {
@@ -145,17 +155,17 @@
 				new Vector3( -0.5, 0.5, -1 ),//3D point
 				new Vector4( -1.5, 0.5, 1, 25 ),//4D point. white color
 			]
-			points = new Points( new BufferGeometry().setFromPoints( options.getPoints( tMin, arrayFuncs, a, b ), 4 ),
-				new PointsMaterial( { size: 0.05, vertexColors: VertexColors } ) );
-			points.geometry.addAttribute( 'color', new Float32BufferAttribute( options.getColors( tMin, arrayFuncs, options.scales.w ), 3 ) );
+			points = new THREE.Points( new BufferGeometry().setFromPoints( options.getPoints( tMin, arrayFuncs, a, b ), 4 ),
+				new THREE.PointsMaterial( { size: 0.05, vertexColors: VertexColors } ) );
+			points.geometry.setAttribute( 'color', new Float32BufferAttribute( options.getColors( tMin, arrayFuncs, options.scales.w ), 3 ) );
 			group.add( points );
 
 			//cubes
 			var cubeType = 'cube';
 			function addCube( cubePosition, color, selectPlayScene ) {
 
-				var cube = new Mesh( new ConvexBufferGeometry( new CubeGeometry( 0.4, 0.4, 0.4 ).vertices ),
-					new MeshLambertMaterial( {
+				var cube = new THREE.Mesh( new ConvexBufferGeometry( new THREE.CubeGeometry( 0.4, 0.4, 0.4 ).vertices ),
+					new THREE.MeshLambertMaterial( {
 
 						color: color,
 						opacity: 0.8,
@@ -201,7 +211,7 @@
 				group.add( cube );
 
 			}
-			addCube( new Vector3( -1, 0, 0 ), 0xffffff, function ( t ) {
+			addCube( new THREE.Vector3( -1, 0, 0 ), 0xffffff, function ( t ) {
 
 				var angle = t * Math.PI * 2 + Math.PI / 4;//45 degree
 				this.cube.rotation.set( angle, angle / 2, angle /4 );
@@ -212,7 +222,7 @@
 				*/
 
 			} );
-			var position = new Vector3( -0.5, 0.5, -0.5 );
+			var position = new THREE.Vector3( -0.5, 0.5, -0.5 );
 			addCube( position, 'green', function ( t ) {
 
 				this.cube.scale.x = 1.4 + t;
@@ -298,7 +308,7 @@
 	</script>
 	<h2>Simple canvas.</h2>
 	<!--<div id="canvasContainer2"></div>-->
-	<script>
+	<script type="module">
 		return;
 		myThreejs.create( function ( group, options ) {
 
