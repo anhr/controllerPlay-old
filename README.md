@@ -1,6 +1,6 @@
 # controllerPlay
 
-Deprecated. Please go to [controllerPlay](https://github.com/anhr/commonNodeJS/tree/master/controllerPlay).
+**Deprecated. Please go to [controllerPlay](https://github.com/anhr/commonNodeJS/tree/master/controllerPlay).**
 
 node.js version of the controllerPlay.
 My custom controller in my version of [dat.gui](https://github.com/anhr/dat.gui) for playing of 3D obects in my projects.
