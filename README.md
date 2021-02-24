@@ -1,4 +1,7 @@
 # controllerPlay
+
+Deprecated. Please go to [controllerPlay](https://github.com/anhr/commonNodeJS/tree/master/controllerPlay).
+
 node.js version of the controllerPlay.
 My custom controller in my version of [dat.gui](https://github.com/anhr/dat.gui) for playing of 3D obects in my projects.
 [Example](https://raw.githack.com/anhr/controllerPlay/master/Examples/html/).
@@ -11,12 +14,12 @@ The easiest way to use controllerPlay in your code is by using the built source 
 
 In your `head` tag, include the following code:
 ```
-<script src="https://raw.githack.com/anhr/loadScriptNodeJS/master/build/loadScript.js"></script>
+<script src="https://raw.githack.com/anhr/commonNodeJS/master/loadScriptNodeJS/build/loadScript.js"></script>
 <script src="https://raw.githack.com/anhr/controllerPlay/master/build/controllerPlay.js"></script>
 ```
 or
 ```
-<script src="https://raw.githack.com/anhr/loadScriptNodeJS/master/build/loadScript.min.js"></script>
+<script src="https://raw.githack.com/anhr/commonNodeJS/master/loadScriptNodeJS/build/loadScript.min.js"></script>
 <script src="https://raw.githack.com/anhr/controllerPlay/master/build/controllerPlay.min.js"></script>
 ```
 or you can import controllerPlay from controllerPlay.js file in your JavaScript module. [Example.](https://raw.githack.com/anhr/myThreejs/master/Examples/html/)
